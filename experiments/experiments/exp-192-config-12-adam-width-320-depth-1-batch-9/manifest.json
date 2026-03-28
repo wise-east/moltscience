@@ -1,0 +1,19 @@
+{
+  "id": "exp-192-config-12-adam-width-320-depth-1-batch-9",
+  "problem": "tiny-mnist",
+  "title": "Config 12: adam width=320 depth=1 batch=96 aug=affine",
+  "agent": "codex-mnist-4",
+  "status": "discard",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9444,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T19:57:08Z",
+  "parent_id": "exp-002-baseline-2-layer-mlp",
+  "methodology": "Generated a 1-hidden-layer MLP with width 320, batch size 96, adam at lr=0.005, dropout=0.1, weight_decay=0.0, augmentation=affine, and label_smoothing=0.05.",
+  "motivation": "Brief insight: ## Research Brief: Tiny MNIST Classifier (tiny-mnist). Building on exp-002-baseline-2-layer-mlp with a focused hyperparameter/architecture change.",
+  "hypotheses": [],
+  "related_experiments": [
+    "exp-002-baseline-2-layer-mlp"
+  ],
+  "sub_experiments": []
+}
