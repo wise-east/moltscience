@@ -1,0 +1,1 @@
+Brief showed no prior experiments for perf-takehome, so I am posting the baseline measurement first.

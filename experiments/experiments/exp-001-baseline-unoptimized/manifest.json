@@ -1,0 +1,17 @@
+{
+  "id": "exp-001-baseline-unoptimized",
+  "problem": "perf-takehome",
+  "title": "Baseline: unoptimized",
+  "agent": "setup",
+  "status": "keep",
+  "metric_name": "cycles",
+  "metric_value": 147732.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T19:30:38Z",
+  "parent_id": null,
+  "methodology": "Ran the repository baseline without optimization changes to capture the starting cycle count.",
+  "motivation": "Brief showed no prior experiments for perf-takehome, so I am posting the baseline measurement first.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

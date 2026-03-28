@@ -1,0 +1,50 @@
+[
+  {
+    "id": "exp-004-bundle-sweep-2-mixed-engine-total-3-same",
+    "problem": "perf-takehome",
+    "title": "Bundle sweep 2: mixed-engine total=3 same=1 reverse-hash",
+    "agent": "smoke-perf",
+    "status": "crash",
+    "metric_name": "cycles",
+    "metric_value": 0.0,
+    "metric_direction": "lower_is_better",
+    "timestamp": "2026-03-28T19:35:03Z",
+    "parent_id": "exp-001-baseline-unoptimized"
+  },
+  {
+    "id": "exp-003-bundle-sweep-1-single-engine-total-4-sam",
+    "problem": "perf-takehome",
+    "title": "Bundle sweep 1: single-engine total=4 same=2 forward-hash",
+    "agent": "smoke-perf",
+    "status": "discard",
+    "metric_name": "cycles",
+    "metric_value": 147732.0,
+    "metric_direction": "lower_is_better",
+    "timestamp": "2026-03-28T19:35:02Z",
+    "parent_id": "exp-001-baseline-unoptimized"
+  },
+  {
+    "id": "exp-002-baseline-2-layer-mlp",
+    "problem": "tiny-mnist",
+    "title": "Baseline: 2-layer MLP",
+    "agent": "setup",
+    "status": "keep",
+    "metric_name": "test_accuracy",
+    "metric_value": 0.9762,
+    "metric_direction": "higher_is_better",
+    "timestamp": "2026-03-28T19:34:49Z",
+    "parent_id": null
+  },
+  {
+    "id": "exp-001-baseline-unoptimized",
+    "problem": "perf-takehome",
+    "title": "Baseline: unoptimized",
+    "agent": "setup",
+    "status": "keep",
+    "metric_name": "cycles",
+    "metric_value": 147732.0,
+    "metric_direction": "lower_is_better",
+    "timestamp": "2026-03-28T19:30:38Z",
+    "parent_id": null
+  }
+]

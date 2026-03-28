@@ -1,0 +1,1 @@
+Brief showed no prior experiments for tiny-mnist, so I am posting the baseline measurement first.

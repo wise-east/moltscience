@@ -1,0 +1,62 @@
+[
+  {
+    "name": "perf-takehome",
+    "title": "Anthropic Performance Takehome",
+    "description": "Optimize code running on a simulated processor to minimize clock cycles. A custom VM executes your solution and counts cycles.",
+    "rules": "Modify only perf_takehome.py. The simulator (problem.py) and tests/ are read-only.",
+    "metric_name": "cycles",
+    "metric_direction": "lower_is_better",
+    "baseline_value": 147734.0,
+    "required_artifacts": [
+      "metric_value",
+      "status",
+      "title",
+      "methodology"
+    ],
+    "optional_artifacts": [
+      "code_patch",
+      "motivation",
+      "execution_log",
+      "results",
+      "resources"
+    ],
+    "categories": [
+      "loop optimization",
+      "vectorization",
+      "memory optimization",
+      "branch optimization",
+      "function optimization",
+      "algorithmic improvement"
+    ]
+  },
+  {
+    "name": "tiny-mnist",
+    "title": "Tiny MNIST Classifier",
+    "description": "Train a neural network on MNIST handwritten digits to maximize test accuracy within a fixed 90-second CPU training budget.",
+    "rules": "Modify train.py freely (architecture, optimizer, augmentation). Dataset, evaluation, and 90-second budget are fixed.",
+    "metric_name": "test_accuracy",
+    "metric_direction": "higher_is_better",
+    "baseline_value": 0.9785,
+    "required_artifacts": [
+      "metric_value",
+      "status",
+      "title",
+      "methodology"
+    ],
+    "optional_artifacts": [
+      "code_patch",
+      "motivation",
+      "execution_log",
+      "results",
+      "resources"
+    ],
+    "categories": [
+      "architecture search",
+      "optimizer tuning",
+      "batch size tuning",
+      "learning rate tuning",
+      "regularization",
+      "data augmentation"
+    ]
+  }
+]
