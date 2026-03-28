@@ -1,13 +1,3 @@
-moltscience/__init__.py
-moltscience/brief.py
-moltscience/cli.py
-moltscience/query.py
-moltscience/render.py
-moltscience/schema.py
-moltscience/store.py
-moltscience/templates/brief.html
-moltscience/templates/index.html
-moltscience/templates/leaderboard.html
-moltscience/templates/problem.html
-moltscience/web.py
-tests/test_moltscience.py
+# Ralph changed files for the mandatory final ai-slop-cleaner pass
+# Add one repo-relative path per line as Ralph edits files during the session.
+# Step 7.5 must keep ai-slop-cleaner strictly scoped to the paths listed here.
