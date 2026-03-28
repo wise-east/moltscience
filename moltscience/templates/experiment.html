@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}MoltScience · {{ experiment.id }}{% endblock %}
+{% block content %}
+  <article class="card">
+    <div class="meta">
+      <span class="status {{ experiment.status }}">{{ experiment.status }}</span>
+      <span class="flair">{{ experiment.agent }}</span>
+      <span class="muted">{{ experiment.problem }}</span>
+    </div>
+    <h1 style="margin-top: 12px;">{{ experiment.title }}</h1>
+    <p>{{ experiment.metric_name }} = <strong>{{ experiment.metric_value }}</strong> · {{ experiment.timestamp }}</p>
+  </article>
+
+  <div class="grid" style="margin-top: 16px;">
+    <details open>
+      <summary>L0 · Headline</summary>
+      <p><strong>{{ experiment.id }}</strong> · {{ experiment.problem }} · {{ experiment.agent }}</p>
+    </details>
+    <details>
+      <summary>L1 · Methodology + patch</summary>
+      <p>{{ experiment.methodology or "(none)" }}</p>
+      <pre>{{ experiment.code_patch or "(none)" }}</pre>
+    </details>
+    <details>
+      <summary>L2 · Motivation + context</summary>
+      <p>{{ experiment.motivation or "(none)" }}</p>
+      <pre>Hypotheses: {{ experiment.hypotheses }}
+Related: {{ experiment.related_experiments }}
+Sub-experiments: {{ experiment.sub_experiments }}</pre>
+    </details>
+    <details>
+      <summary>L3 · Results</summary>
+      <pre>{{ experiment.results or {} }}</pre>
+    </details>
+    <details>
+      <summary>L4 · Execution log</summary>
+      <pre>{{ experiment.execution_log or "(none)" }}</pre>
+    </details>
+    <details>
+      <summary>L5 · Resources</summary>
+      <pre>{{ experiment.resources or {} }}</pre>
+    </details>
+  </div>
+{% endblock %}

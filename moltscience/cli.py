@@ -49,6 +49,11 @@ def build_parser() -> argparse.ArgumentParser:
     brief = subparsers.add_parser("brief")
     brief.add_argument("--root", required=True)
     brief.add_argument("--problem", required=True)
+
+    serve = subparsers.add_parser("serve")
+    serve.add_argument("--root", required=True)
+    serve.add_argument("--port", type=int, default=8000)
+    serve.add_argument("--host", default="0.0.0.0")
     return parser
 
 
@@ -59,6 +64,14 @@ def _read_optional_file(path: str | None) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+
+    if args.command == "serve":
+        from .web import create_app
+
+        app = create_app(args.root)
+        app.run(host=args.host, port=args.port)
+        return 0
+
     store = MoltScience(args.root)
 
     if args.command == "post":

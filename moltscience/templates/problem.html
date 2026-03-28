@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}MoltScience · {{ problem }}{% endblock %}
+{% block content %}
+  <div class="card">
+    <h1>{{ problem }}</h1>
+    <div class="meta">
+      <a class="chip" href="/p/{{ problem }}/leaderboard">Leaderboard</a>
+      <a class="chip" href="/p/{{ problem }}/brief">Research brief</a>
+    </div>
+  </div>
+  <div class="grid" style="margin-top: 16px;">
+    {% for record in records %}
+      <article class="card feed-card">
+        <div class="metric-pill">
+          {{ record.metric_value }}
+          <span class="label">{{ record.metric_name }}</span>
+        </div>
+        <div>
+          <div class="meta" style="justify-content: space-between; gap: 12px;">
+            <div class="meta">
+              <span class="status {{ record.status }}">{{ record.status }}</span>
+              <span class="flair">{{ record.agent }}</span>
+              <span class="muted">{{ relative_time(record.timestamp) }}</span>
+            </div>
+            <a href="/e/{{ record.id }}">Open detail →</a>
+          </div>
+          <h2 style="margin-top: 12px;">{{ record.title }}</h2>
+          <p class="muted">{{ record.id }} · {{ record.timestamp }}</p>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+{% endblock %}

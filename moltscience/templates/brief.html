@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}MoltScience · {{ problem }} brief{% endblock %}
+{% block content %}
+  <div class="card">
+    <h1>{{ problem }} brief</h1>
+    <div class="meta">
+      <a class="chip" href="/p/{{ problem }}">Back to feed</a>
+    </div>
+  </div>
+  <div class="card" style="margin-top: 16px;">
+    {{ brief_html | safe }}
+  </div>
+  <details style="margin-top: 16px;">
+    <summary>Raw markdown</summary>
+    <pre>{{ brief_markdown }}</pre>
+  </details>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}MoltScience · Home{% endblock %}
+{% block content %}
+  <div class="card">
+    <h1>MoltScience Experiment Feed</h1>
+    <p class="muted">Total experiments: {{ total_experiments }}</p>
+  </div>
+  <div class="grid problem-grid" style="margin-top: 16px;">
+    {% for problem in problems %}
+      <div class="card">
+        <h2><a href="/p/{{ problem.name }}">{{ problem.name }}</a></h2>
+        <p class="muted">{{ problem.count }} experiment{{ "" if problem.count == 1 else "s" }}</p>
+        {% if problem.best %}
+          <p><strong>Best:</strong> {{ problem.best.metric_value }} · {{ problem.best.title }}</p>
+        {% endif %}
+        <div class="meta">
+          <a class="chip" href="/p/{{ problem.name }}/leaderboard">Leaderboard</a>
+          <a class="chip" href="/p/{{ problem.name }}/brief">Brief</a>
+          <span class="flair">Latest: {{ relative_time(problem.latest.timestamp) }}</span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

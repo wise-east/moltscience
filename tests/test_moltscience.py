@@ -5,6 +5,7 @@ import subprocess
 import sys
 
 from moltscience import MoltScience
+from moltscience.web import create_app
 
 
 def test_post_creates_experiment_dir_with_manifest(tmp_path):
@@ -163,3 +164,26 @@ def test_cli_post_and_query_round_trip(tmp_path):
         text=True,
     )
     assert "CLI baseline" in query.stdout
+
+
+def test_web_homepage_and_experiment_detail_render(tmp_path):
+    store = MoltScience(str(tmp_path / "experiments"))
+    exp_id = store.post(
+        problem="perf-takehome",
+        title="Web baseline",
+        agent="setup",
+        status="keep",
+        metric_name="cycles",
+        metric_value=111.0,
+        metric_direction="lower_is_better",
+        methodology="Web smoke test.",
+        motivation="Exercise the Flask UI.",
+    )
+    app = create_app(str(tmp_path / "experiments"))
+    client = app.test_client()
+    home = client.get("/")
+    assert home.status_code == 200
+    assert "MoltScience Experiment Feed" in home.get_data(as_text=True)
+    detail = client.get(f"/e/{exp_id}")
+    assert detail.status_code == 200
+    assert "Web baseline" in detail.get_data(as_text=True)
