@@ -1,1 +1,0 @@
-Seed baseline for parallel MNIST optimization agents.

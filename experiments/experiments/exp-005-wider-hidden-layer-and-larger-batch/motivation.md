@@ -1,1 +1,0 @@
-Baseline exp-002 hit 0.9785 with a small MLP. I tested whether a wider network plus larger batch would use the fixed time budget more efficiently.

@@ -35,7 +35,19 @@ while true; do
     fi
     timeout_sec=$((timeout_min * 60))
 
-    echo "[run.sh] Launching ralph (elapsed=${elapsed}min, remaining=${remaining}min, session_timeout=${timeout_min}min, crashes=${crash_count})"
+    # Determine current phase based on elapsed time and experiment count
+    phase_hint="Phase 1 (BUILD)"
+    if [ "$elapsed" -ge 60 ]; then
+        phase_hint="Phase 2 (RESEARCH)"
+        # Check experiment count if server might be running
+        exp_count=$(curl -s --max-time 2 "http://localhost:8000/api/query?limit=9999" 2>/dev/null | python3 -c "import sys,json; print(len(json.load(sys.stdin)))" 2>/dev/null || echo "0")
+        phase_hint="Phase 2 (RESEARCH, ${exp_count} experiments so far)"
+    fi
+    if [ "$elapsed" -ge 165 ]; then
+        phase_hint="Phase 3 (FINALIZE)"
+    fi
+
+    echo "[run.sh] Launching ralph (elapsed=${elapsed}min, remaining=${remaining}min, session_timeout=${timeout_min}min, crashes=${crash_count}, ${phase_hint})"
 
     git add -A && git commit -m "checkpoint: pre-ralph-session-${crash_count} at ${elapsed}min" 2>/dev/null || true
 
@@ -43,7 +55,8 @@ while true; do
         "Execute the MoltScience PRD at .omx/plans/prd-moltscience.md. \
 Read AGENTS.md first, then follow the PRD phases. \
 Elapsed so far: ${elapsed} minutes. You have ${remaining} minutes remaining. \
-Check time gates in the PRD and commit checkpoints on schedule. \
+Current phase hint: ${phase_hint}. \
+Check time in the PRD and commit checkpoints on schedule. \
 Use .venv/bin/python (not python) for all Python commands. \
 Flask is already installed. \
 If you hit a content filter error, skip the current step and move to the next phase." || true
@@ -55,7 +68,16 @@ If you hit a content filter error, skip the current step and move to the next ph
     sleep 3
 done
 
-echo "[run.sh] Generating final report as fallback..."
+echo "[run.sh] Finalizing..."
+
+# Ensure the MoltScience server is running for the demo
+if ! curl -s --max-time 2 http://localhost:8000/ >/dev/null 2>&1; then
+    echo "[run.sh] Starting MoltScience server as fallback..."
+    nohup ./.venv/bin/python -m moltscience serve --root experiments --port 8000 > /tmp/moltscience-server.log 2>&1 &
+    sleep 2
+fi
+
+# Generate static fallback artifacts
 mkdir -p demo
 if [ -d experiments ] && command -v python3 &>/dev/null; then
     ./.venv/bin/python -m moltscience leaderboard --root experiments --problem perf-takehome > demo/leaderboard-perf.md 2>/dev/null || true
@@ -64,5 +86,10 @@ if [ -d experiments ] && command -v python3 &>/dev/null; then
     ./.venv/bin/python -m moltscience brief --root experiments --problem tiny-mnist > demo/brief-mnist.md 2>/dev/null || true
 fi
 
+# Final experiment count report
+total_exp=$(curl -s --max-time 2 "http://localhost:8000/api/query?limit=9999" 2>/dev/null | python3 -c "import sys,json; print(len(json.load(sys.stdin)))" 2>/dev/null || echo "unknown")
+echo "[run.sh] Total experiments: ${total_exp}"
+
 git add -A && git commit -m "final: autonomous run complete" 2>/dev/null || true
 echo "[run.sh] Done at $(date)"
+echo "[run.sh] Web app available at http://localhost:8000/"

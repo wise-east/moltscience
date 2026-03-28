@@ -1,1 +1,0 @@
-Baseline exp-001 spends cycles on instrumentation-only bundles. This experiment checks whether deleting those bundles produces a free speedup without changing semantics.
