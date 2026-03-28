@@ -1,38 +1,64 @@
 from __future__ import annotations
 
+import json
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 from .query import load_index
-from .schema import ExperimentStatus, MetricDirection
+from .schema import ExperimentStatus, MetricDirection, ProblemDefinition
 
 
 CATEGORY_KEYWORDS = [
-    (("unroll", "loop"), "Loop optimization"),
-    (("simd", "vector", "avx"), "Vectorization"),
-    (("cache", "align", "prefetch"), "Memory optimization"),
-    (("branch", "predict", "cmov"), "Branch optimization"),
-    (("inline", "flatten"), "Function optimization"),
-    (("lr", "learning rate"), "Learning rate tuning"),
-    (("batch", "batch size"), "Batch size tuning"),
-    (("arch", "layer", "hidden", "width", "depth"), "Architecture search"),
-    (("optim", "adam", "sgd", "momentum"), "Optimizer tuning"),
-    (("schedule", "warmup", "decay"), "Schedule tuning"),
+    (("unroll", "loop"), "loop optimization"),
+    (("simd", "vector", "avx"), "vectorization"),
+    (("cache", "align", "prefetch", "memory"), "memory optimization"),
+    (("branch", "predict", "cmov"), "branch optimization"),
+    (("inline", "flatten", "function"), "function optimization"),
+    (("algorithm", "rewrite"), "algorithmic improvement"),
+    (("lr", "learning rate"), "learning rate tuning"),
+    (("batch", "batch size"), "batch size tuning"),
+    (("arch", "layer", "hidden", "width", "depth"), "architecture search"),
+    (("optim", "adam", "sgd", "momentum"), "optimizer tuning"),
+    (("augment", "rotation", "dropout"), "regularization"),
 ]
 
 
-def categorize(title: str, methodology: str) -> str:
+def _load_problem(root: Path, problem: str) -> ProblemDefinition | None:
+    problems_path = root / "problems.json"
+    if not problems_path.exists():
+        return None
+    for item in json.loads(problems_path.read_text()):
+        if item["name"] == problem:
+            return ProblemDefinition.from_dict(item)
+    return None
+
+
+def categorize(title: str, methodology: str, categories: list[str] | None = None) -> str:
     haystack = f"{title} {methodology}".lower()
     for keywords, category in CATEGORY_KEYWORDS:
         if any(keyword in haystack for keyword in keywords):
             return category
-    return "Other"
+    if categories:
+        return categories[0]
+    return "other"
 
 
 def generate_brief(root: str | Path, problem: str) -> str:
-    experiments = [record for record in load_index(root) if record["problem"] == problem]
+    root_path = Path(root)
+    problem_definition = _load_problem(root_path, problem)
+    experiments = [record for record in load_index(root_path) if record["problem"] == problem]
+
+    heading = f"## Research Brief: {problem}"
+    if problem_definition is not None:
+        heading = f"## Research Brief: {problem_definition.title} ({problem})"
+
     if not experiments:
-        return f"## Research Brief: {problem}\n\nNo experiments found for {problem}."
+        lines = [heading, "", f"No experiments found for {problem}."]
+        if problem_definition is not None and problem_definition.categories:
+            lines.extend(["", "### Suggested starting directions"])
+            lines.extend(f"- Try {category}." for category in problem_definition.categories[:4])
+        return "\n".join(lines)
 
     keep = [record for record in experiments if record["status"] == ExperimentStatus.KEEP.value]
     discard = [record for record in experiments if record["status"] == ExperimentStatus.DISCARD.value]
@@ -52,27 +78,29 @@ def generate_brief(root: str | Path, problem: str) -> str:
     else:
         best_line = "Best: no keep experiments yet"
 
-    categories: dict[str, list[dict]] = defaultdict(list)
+    categories: dict[str, list[dict[str, Any]]] = defaultdict(list)
     tried_categories: set[str] = set()
-    root_path = Path(root)
     for record in experiments:
         methodology = ""
         manifest_path = root_path / "experiments" / record["id"] / "manifest.json"
         if manifest_path.exists():
-            import json
-
             methodology = json.loads(manifest_path.read_text()).get("methodology", "")
-        category = categorize(record["title"], methodology)
+        category = categorize(
+            record["title"],
+            methodology,
+            problem_definition.categories if problem_definition is not None else None,
+        )
         categories[category].append(record)
         tried_categories.add(category)
 
     lines = [
-        f"## Research Brief: {problem}",
+        heading,
         best_line,
         f"Experiments: {len(experiments)} ({len(keep)} keep, {len(discard)} discard, {len(crash)} crash)",
-        "",
-        "### Approaches tried",
     ]
+    if problem_definition is not None:
+        lines.extend(["", problem_definition.description, f"Rules: {problem_definition.rules}"])
+    lines.extend(["", "### Approaches tried"])
     for category, records in sorted(categories.items()):
         direction = records[0]["metric_direction"]
         best_record = sorted(
@@ -89,17 +117,20 @@ def generate_brief(root: str | Path, problem: str) -> str:
             )
 
     suggestions: list[str] = []
-    all_categories = {category for _, category in CATEGORY_KEYWORDS}
-    untried = sorted(all_categories - tried_categories)
-    suggestions.extend(f"Try {category.lower()}." for category in untried[:3])
+    catalog = set(problem_definition.categories if problem_definition is not None else [])
+    catalog.update(category for _, category in CATEGORY_KEYWORDS)
+    untried = sorted(category for category in catalog if category and category not in tried_categories)
+    suggestions.extend(f"Try {category}." for category in untried[:4])
     suggestions.extend(
-        f"Explore another variant of {category.lower()}."
+        f"Explore another variant of {category}."
         for category, records in sorted(categories.items())
-        if len(records) == 1
+        if len(records) <= 1
     )
-    if not suggestions:
+    if keep:
         suggestions.append("Combine successful elements from the current best experiments.")
+    if not suggestions:
+        suggestions.append("Increase diversity across categories before doubling down on a single idea.")
 
     lines.extend(["", "### Promising directions"])
-    lines.extend(f"- {suggestion}" for suggestion in suggestions)
+    lines.extend(f"- {suggestion}" for suggestion in suggestions[:6])
     return "\n".join(lines)

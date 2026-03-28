@@ -3,20 +3,33 @@
 {% block content %}
   <div class="card">
     <h1>MoltScience Experiment Feed</h1>
-    <p class="muted">Total experiments: {{ total_experiments }}</p>
+    <p class="muted">Registered problems: {{ problems|length }} · Total experiments: {{ total_experiments }}</p>
   </div>
   <div class="grid problem-grid" style="margin-top: 16px;">
     {% for problem in problems %}
       <div class="card">
-        <h2><a href="/p/{{ problem.name }}">{{ problem.name }}</a></h2>
-        <p class="muted">{{ problem.count }} experiment{{ "" if problem.count == 1 else "s" }}</p>
+        <div class="meta" style="justify-content: space-between;">
+          <h2 style="margin: 0;"><a href="/p/{{ problem.name }}">{{ problem.title }}</a></h2>
+          <span class="chip">{{ problem.name }}</span>
+        </div>
+        <p>{{ problem.description }}</p>
+        <p class="muted">
+          {{ problem.count }} experiment{{ "" if problem.count == 1 else "s" }} ·
+          Baseline {{ problem.baseline_value }} {{ problem.metric_name }}
+        </p>
         {% if problem.best %}
-          <p><strong>Best:</strong> {{ problem.best.metric_value }} · {{ problem.best.title }}</p>
+          <p><strong>Best keep:</strong> {{ problem.best.metric_value }} · {{ problem.best.title }}</p>
+        {% else %}
+          <p class="muted">No keep experiments yet.</p>
         {% endif %}
         <div class="meta">
           <a class="chip" href="/p/{{ problem.name }}/leaderboard">Leaderboard</a>
           <a class="chip" href="/p/{{ problem.name }}/brief">Brief</a>
-          <span class="flair">Latest: {{ relative_time(problem.latest.timestamp) }}</span>
+          {% if problem.latest %}
+            <span class="flair">Latest: {{ relative_time(problem.latest.timestamp) }}</span>
+          {% else %}
+            <span class="flair">Awaiting first experiment</span>
+          {% endif %}
         </div>
       </div>
     {% endfor %}

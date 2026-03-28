@@ -43,21 +43,22 @@ def rebuild_leaderboard(
     for record in records:
         if record["status"] != ExperimentStatus.KEEP.value:
             continue
-        problem = record["problem"]
-        grouped.setdefault(
-            problem,
+        payload = grouped.setdefault(
+            record["problem"],
             {
                 "metric_name": record["metric_name"],
                 "metric_direction": record["metric_direction"],
                 "entries": [],
             },
-        )["entries"].append(
+        )
+        payload["entries"].append(
             {
                 "id": record["id"],
                 "metric_value": record["metric_value"],
                 "agent": record["agent"],
                 "title": record["title"],
                 "timestamp": record["timestamp"],
+                "parent_id": record.get("parent_id"),
             }
         )
     for payload in grouped.values():
@@ -89,14 +90,15 @@ def filter_and_sort_records(
     ]
 
     if sort == "metric_value":
-        def metric_key(record: dict[str, Any]) -> float:
-            value = float(record["metric_value"])
-            if record["metric_direction"] == MetricDirection.HIGHER_IS_BETTER.value:
-                return -value
-            return value
-
-        filtered.sort(key=metric_key, reverse=ascending)
+        filtered.sort(
+            key=lambda record: (
+                -float(record["metric_value"])
+                if record["metric_direction"] == MetricDirection.HIGHER_IS_BETTER.value
+                else float(record["metric_value"])
+            ),
+            reverse=ascending,
+        )
     else:
-        filtered.sort(key=lambda record: record[sort], reverse=not ascending)
+        filtered.sort(key=lambda record: record.get(sort, ""), reverse=not ascending)
 
     return filtered[:limit]

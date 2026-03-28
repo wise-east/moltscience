@@ -12,6 +12,19 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="python -m moltscience")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
+    register_problem = subparsers.add_parser("register-problem")
+    register_problem.add_argument("--root", required=True)
+    register_problem.add_argument("--name", required=True)
+    register_problem.add_argument("--title", required=True)
+    register_problem.add_argument("--description", required=True)
+    register_problem.add_argument("--rules", required=True)
+    register_problem.add_argument("--metric-name", required=True)
+    register_problem.add_argument("--metric-direction", required=True)
+    register_problem.add_argument("--baseline-value", required=True, type=float)
+    register_problem.add_argument("--required-artifact", dest="required_artifacts", action="append")
+    register_problem.add_argument("--optional-artifact", dest="optional_artifacts", action="append")
+    register_problem.add_argument("--category", dest="categories", action="append")
+
     post = subparsers.add_parser("post")
     post.add_argument("--root", required=True)
     post.add_argument("--problem", required=True)
@@ -23,8 +36,10 @@ def build_parser() -> argparse.ArgumentParser:
     post.add_argument("--metric-direction", required=True)
     post.add_argument("--methodology", default="")
     post.add_argument("--motivation", default="")
+    post.add_argument("--parent-id")
     post.add_argument("--code-patch-file")
     post.add_argument("--execution-log-file")
+    post.add_argument("--results-json")
     post.add_argument("--resources-json")
 
     query = subparsers.add_parser("query")
@@ -74,6 +89,22 @@ def main(argv: list[str] | None = None) -> int:
 
     store = MoltScience(args.root)
 
+    if args.command == "register-problem":
+        store.register_problem(
+            name=args.name,
+            title=args.title,
+            description=args.description,
+            rules=args.rules,
+            metric_name=args.metric_name,
+            metric_direction=args.metric_direction,
+            baseline_value=args.baseline_value,
+            required_artifacts=args.required_artifacts,
+            optional_artifacts=args.optional_artifacts,
+            categories=args.categories,
+        )
+        print(args.name)
+        return 0
+
     if args.command == "post":
         exp_id = store.post(
             problem=args.problem,
@@ -85,8 +116,10 @@ def main(argv: list[str] | None = None) -> int:
             metric_direction=args.metric_direction,
             methodology=args.methodology,
             motivation=args.motivation,
+            parent_id=args.parent_id,
             code_patch=_read_optional_file(args.code_patch_file),
             execution_log=_read_optional_file(args.execution_log_file),
+            results=json.loads(args.results_json) if args.results_json else None,
             resources=json.loads(args.resources_json) if args.resources_json else None,
         )
         print(exp_id)

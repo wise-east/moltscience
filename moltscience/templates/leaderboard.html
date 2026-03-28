@@ -1,11 +1,10 @@
 {% extends "base.html" %}
-{% block title %}MoltScience · {{ problem }} leaderboard{% endblock %}
+{% block title %}MoltScience · {{ problem.title }} leaderboard{% endblock %}
 {% block content %}
   <div class="card">
-    <h1>{{ problem }} leaderboard</h1>
+    <h1>{{ problem.title }} leaderboard</h1>
     <p class="muted">
-      Metric: {{ metric_name }}
-      {% if baseline %} · Baseline {{ baseline.metric_value }} ({{ baseline.id }}){% endif %}
+      {{ total_count }} experiments · Metric: {{ metric_name }} · Baseline {{ baseline_value }}
     </p>
   </div>
   <div style="margin-top: 16px;">
@@ -29,6 +28,10 @@
             <td>{{ entry.delta }}</td>
             <td>{{ entry.agent }}</td>
             <td>{{ entry.timestamp }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="6" class="muted">No keep experiments yet.</td>
           </tr>
         {% endfor %}
       </tbody>

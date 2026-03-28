@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from flask import Flask, abort, render_template
+from flask import Flask, Response, abort, jsonify, render_template, request
 
 from .query import load_index
 from .store import MoltScience
@@ -87,6 +87,10 @@ def _brief_to_html(markdown_text: str) -> str:
     return "\n".join(rendered)
 
 
+def _wants_json() -> bool:
+    return request.path.startswith("/api/")
+
+
 def create_app(root: str) -> Flask:
     app = Flask(__name__, template_folder=str(Path(__file__).with_name("templates")))
     store = MoltScience(root)
@@ -95,41 +99,63 @@ def create_app(root: str) -> Flask:
     def inject_helpers() -> dict[str, Any]:
         return {"relative_time": _relative_time}
 
+    @app.errorhandler(FileNotFoundError)
+    def handle_not_found(_: FileNotFoundError):
+        if _wants_json():
+            return jsonify({"error": "not_found"}), 404
+        abort(404)
+
+    @app.errorhandler(404)
+    def handle_404(_: Any):
+        if _wants_json():
+            return jsonify({"error": "not_found"}), 404
+        return render_template("base.html"), 404
+
+    @app.errorhandler(400)
+    def handle_400(error: Any):
+        if _wants_json():
+            return jsonify({"error": "bad_request", "detail": str(error)}), 400
+        return str(error), 400
+
     @app.get("/")
     def index():
         records = load_index(root)
-        grouped: dict[str, list[dict[str, Any]]] = {}
+        records_by_problem: dict[str, list[dict[str, Any]]] = {}
         for record in records:
-            grouped.setdefault(record["problem"], []).append(record)
+            records_by_problem.setdefault(record["problem"], []).append(record)
         problems: list[dict[str, Any]] = []
-        for problem, problem_records in sorted(grouped.items()):
-            leaderboard = store.leaderboard(problem)
+        for problem in store.problems():
+            problem_records = records_by_problem.get(problem["name"], [])
+            leaderboard = store.leaderboard(problem["name"])
             best = leaderboard.get("entries", [{}])[0] if leaderboard.get("entries") else None
             problems.append(
                 {
-                    "name": problem,
+                    **problem,
                     "count": len(problem_records),
                     "best": best,
-                    "latest": problem_records[0],
+                    "latest": problem_records[0] if problem_records else None,
                 }
             )
         return render_template("index.html", problems=problems, total_experiments=len(records))
 
     @app.get("/p/<problem>")
     def problem_feed(problem: str):
+        problem_definition = store.problem(problem)
         records = store.query(problem=problem, level=0, sort="timestamp", ascending=False, limit=200)
-        if not records:
-            abort(404)
-        return render_template("problem.html", problem=problem, records=records)
+        leaderboard = store.leaderboard(problem)
+        return render_template(
+            "problem.html",
+            problem=problem_definition,
+            records=records,
+            leaderboard=leaderboard,
+        )
 
     @app.get("/p/<problem>/leaderboard")
     def problem_leaderboard(problem: str):
+        problem_definition = store.problem(problem)
         leaderboard = store.leaderboard(problem)
-        if not leaderboard.get("entries"):
-            abort(404)
-        problem_records = store.query(problem=problem, level=0, sort="timestamp", ascending=True, limit=500)
-        baseline = next((record for record in problem_records if record["agent"] == "setup"), None)
-        baseline_value = float(baseline["metric_value"]) if baseline else None
+        problem_records = store.query(problem=problem, level=0, sort="timestamp", ascending=True, limit=1000)
+        baseline_value = float(problem_definition["baseline_value"])
         entries = [
             {
                 **entry,
@@ -145,30 +171,77 @@ def create_app(root: str) -> Flask:
         ]
         return render_template(
             "leaderboard.html",
-            problem=problem,
+            problem=problem_definition,
             metric_name=leaderboard["metric_name"],
-            baseline=baseline,
+            baseline_value=baseline_value,
             entries=entries,
+            total_count=len(problem_records),
         )
 
     @app.get("/p/<problem>/brief")
     def problem_brief(problem: str):
+        problem_definition = store.problem(problem)
         brief_markdown = store.brief(problem)
-        if "No experiments found" in brief_markdown:
-            abort(404)
         return render_template(
             "brief.html",
-            problem=problem,
+            problem=problem_definition,
             brief_markdown=brief_markdown,
             brief_html=_brief_to_html(brief_markdown),
         )
 
     @app.get("/e/<exp_id>")
     def experiment_detail(exp_id: str):
-        try:
-            experiment = store.get(exp_id, level=5)
-        except FileNotFoundError:
-            abort(404)
+        experiment = store.get(exp_id, level=5)
         return render_template("experiment.html", experiment=experiment)
+
+    @app.get("/api/problems")
+    def api_problems():
+        return jsonify(store.problems())
+
+    @app.post("/api/problems")
+    def api_register_problem():
+        payload = request.get_json(force=True, silent=False) or {}
+        store.register_problem(**payload)
+        return jsonify(store.problem(payload["name"])), 201
+
+    @app.get("/api/problems/<name>")
+    def api_problem(name: str):
+        return jsonify(store.problem(name))
+
+    @app.post("/api/post")
+    def api_post():
+        payload = request.get_json(force=True, silent=False) or {}
+        exp_id = store.post(**payload)
+        return jsonify({"id": exp_id}), 201
+
+    @app.get("/api/query")
+    def api_query():
+        level = int(request.args.get("level", 0))
+        limit = int(request.args.get("limit", 50))
+        ascending = request.args.get("ascending", "false").lower() in {"1", "true", "yes"}
+        return jsonify(
+            store.query(
+                problem=request.args.get("problem"),
+                status=request.args.get("status"),
+                agent=request.args.get("agent"),
+                level=level,
+                sort=request.args.get("sort", "timestamp"),
+                ascending=ascending,
+                limit=limit,
+            )
+        )
+
+    @app.get("/api/get/<exp_id>")
+    def api_get(exp_id: str):
+        level = int(request.args.get("level", 0))
+        return jsonify(store.get(exp_id, level=level))
+
+    @app.get("/api/leaderboard/<problem>")
+    def api_leaderboard(problem: str):
+        return jsonify(store.leaderboard(problem))
+
+    @app.get("/api/brief/<problem>")
+    def api_brief(problem: str):
+        return Response(store.brief(problem), mimetype="text/plain")
 
     return app

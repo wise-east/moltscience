@@ -9,7 +9,14 @@ from typing import Any
 from .brief import generate_brief
 from .query import filter_and_sort_records, load_index, rebuild_index
 from .render import render_experiment
-from .schema import ExperimentStatus, Manifest, MetricDirection
+from .schema import (
+    DEFAULT_OPTIONAL_ARTIFACTS,
+    DEFAULT_REQUIRED_ARTIFACTS,
+    ExperimentStatus,
+    Manifest,
+    MetricDirection,
+    ProblemDefinition,
+)
 
 
 def _slugify(value: str) -> str:
@@ -25,18 +32,27 @@ def _read_json(path: Path, default: Any) -> Any:
     return json.loads(path.read_text()) if path.exists() else default
 
 
+def _write_json(path: Path, payload: Any) -> None:
+    path.write_text(json.dumps(payload, indent=2) + "\n")
+
+
 class MoltScience:
     def __init__(self, root: str) -> None:
         self.root = Path(root)
         self.experiments_dir = self.root / "experiments"
+        self.problems_path = self.root / "problems.json"
+        self.index_path = self.root / "index.json"
+        self.leaderboard_path = self.root / "leaderboard.json"
+
         self.root.mkdir(parents=True, exist_ok=True)
         self.experiments_dir.mkdir(parents=True, exist_ok=True)
         for path, default in (
-            (self.root / "index.json", []),
-            (self.root / "leaderboard.json", {}),
+            (self.problems_path, []),
+            (self.index_path, []),
+            (self.leaderboard_path, {}),
         ):
             if not path.exists():
-                path.write_text(json.dumps(default, indent=2) + "\n")
+                _write_json(path, default)
 
     def _next_experiment_id(self, title: str) -> str:
         max_n = 0
@@ -45,6 +61,53 @@ class MoltScience:
             if match:
                 max_n = max(max_n, int(match.group(1)))
         return f"exp-{max_n + 1:03d}-{_slugify(title)}"
+
+    def problems(self) -> list[dict[str, Any]]:
+        return _read_json(self.problems_path, [])
+
+    def problem(self, name: str) -> dict[str, Any]:
+        for problem in self.problems():
+            if problem["name"] == name:
+                return problem
+        raise FileNotFoundError(name)
+
+    def register_problem(
+        self,
+        *,
+        name: str,
+        title: str,
+        description: str,
+        rules: str,
+        metric_name: str,
+        metric_direction: str,
+        baseline_value: float,
+        required_artifacts: list[str] | None = None,
+        optional_artifacts: list[str] | None = None,
+        categories: list[str] | None = None,
+    ) -> None:
+        definition = ProblemDefinition(
+            name=name,
+            title=title,
+            description=description,
+            rules=rules,
+            metric_name=metric_name,
+            metric_direction=MetricDirection(metric_direction),
+            baseline_value=float(baseline_value),
+            required_artifacts=list(required_artifacts or DEFAULT_REQUIRED_ARTIFACTS),
+            optional_artifacts=list(optional_artifacts or DEFAULT_OPTIONAL_ARTIFACTS),
+            categories=list(categories or []),
+        )
+        problems = self.problems()
+        replaced = False
+        for index, problem in enumerate(problems):
+            if problem["name"] == name:
+                problems[index] = definition.to_dict()
+                replaced = True
+                break
+        if not replaced:
+            problems.append(definition.to_dict())
+        problems.sort(key=lambda item: item["name"])
+        _write_json(self.problems_path, problems)
 
     def post(
         self,
@@ -65,6 +128,7 @@ class MoltScience:
         results: dict | None = None,
         execution_log: str = "",
         resources: dict | None = None,
+        parent_id: str | None = None,
     ) -> str:
         try:
             parsed_status = ExperimentStatus(status)
@@ -90,24 +154,25 @@ class MoltScience:
             metric_value=float(metric_value),
             metric_direction=parsed_direction,
             timestamp=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            parent_id=parent_id,
             methodology=methodology,
             motivation=motivation,
             hypotheses=list(hypotheses or []),
             related_experiments=list(related_experiments or []),
             sub_experiments=list(sub_experiments or []),
         )
-        (exp_dir / "manifest.json").write_text(json.dumps(manifest.to_dict(), indent=2) + "\n")
+        _write_json(exp_dir / "manifest.json", manifest.to_dict())
 
         if code_patch:
             (exp_dir / "code.patch").write_text(code_patch)
         if motivation:
             (exp_dir / "motivation.md").write_text(motivation)
         if results is not None:
-            (exp_dir / "results.json").write_text(json.dumps(results, indent=2) + "\n")
+            _write_json(exp_dir / "results.json", results)
         if execution_log:
             (logs_dir / "execution.log").write_text(execution_log)
         if resources is not None:
-            (logs_dir / "resources.json").write_text(json.dumps(resources, indent=2) + "\n")
+            _write_json(logs_dir / "resources.json", resources)
 
         summary = render_experiment(
             {
@@ -171,8 +236,18 @@ class MoltScience:
         return [self.get(record["id"], level=level) for record in records]
 
     def leaderboard(self, problem: str) -> dict[str, Any]:
-        leaderboard = _read_json(self.root / "leaderboard.json", {})
-        return leaderboard.get(problem, {"metric_name": "", "metric_direction": "", "entries": []})
+        leaderboard = _read_json(self.leaderboard_path, {})
+        if problem in leaderboard:
+            return leaderboard[problem]
+        try:
+            problem_definition = self.problem(problem)
+        except FileNotFoundError:
+            return {"metric_name": "", "metric_direction": "", "entries": []}
+        return {
+            "metric_name": problem_definition["metric_name"],
+            "metric_direction": problem_definition["metric_direction"],
+            "entries": [],
+        }
 
     def brief(self, problem: str) -> str:
         return generate_brief(self.root, problem)

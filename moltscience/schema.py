@@ -5,6 +5,16 @@ from enum import Enum
 from typing import Any
 
 
+DEFAULT_REQUIRED_ARTIFACTS = ["metric_value", "status", "title", "methodology"]
+DEFAULT_OPTIONAL_ARTIFACTS = [
+    "code_patch",
+    "motivation",
+    "execution_log",
+    "results",
+    "resources",
+]
+
+
 class ExperimentStatus(str, Enum):
     KEEP = "keep"
     DISCARD = "discard"
@@ -24,6 +34,38 @@ class Metric:
 
 
 @dataclass
+class ProblemDefinition:
+    name: str
+    title: str
+    description: str
+    rules: str
+    metric_name: str
+    metric_direction: MetricDirection
+    baseline_value: float
+    required_artifacts: list[str] = field(default_factory=lambda: list(DEFAULT_REQUIRED_ARTIFACTS))
+    optional_artifacts: list[str] = field(default_factory=lambda: list(DEFAULT_OPTIONAL_ARTIFACTS))
+    categories: list[str] = field(default_factory=list)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "ProblemDefinition":
+        return cls(
+            name=data["name"],
+            title=data["title"],
+            description=data["description"],
+            rules=data["rules"],
+            metric_name=data["metric_name"],
+            metric_direction=MetricDirection(data["metric_direction"]),
+            baseline_value=float(data["baseline_value"]),
+            required_artifacts=list(data.get("required_artifacts") or DEFAULT_REQUIRED_ARTIFACTS),
+            optional_artifacts=list(data.get("optional_artifacts") or DEFAULT_OPTIONAL_ARTIFACTS),
+            categories=list(data.get("categories", [])),
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        return _serialize_dataclass(self)
+
+
+@dataclass
 class Experiment:
     id: str
     problem: str
@@ -32,7 +74,9 @@ class Experiment:
     status: ExperimentStatus
     metric: Metric
     timestamp: str
+    parent_id: str | None = None
     methodology: str = ""
+    motivation: str = ""
     hypotheses: list[str] = field(default_factory=list)
     related_experiments: list[str] = field(default_factory=list)
     sub_experiments: list[dict[str, Any]] = field(default_factory=list)
@@ -49,6 +93,7 @@ class Manifest:
     metric_value: float
     metric_direction: MetricDirection
     timestamp: str
+    parent_id: str | None = None
     methodology: str = ""
     motivation: str = ""
     hypotheses: list[str] = field(default_factory=list)
@@ -67,6 +112,7 @@ class Manifest:
             metric_value=float(data["metric_value"]),
             metric_direction=MetricDirection(data["metric_direction"]),
             timestamp=data["timestamp"],
+            parent_id=data.get("parent_id"),
             methodology=data.get("methodology", ""),
             motivation=data.get("motivation", ""),
             hypotheses=list(data.get("hypotheses", [])),
@@ -75,10 +121,7 @@ class Manifest:
         )
 
     def to_dict(self) -> dict[str, Any]:
-        data = asdict(self)
-        data["status"] = self.status.value
-        data["metric_direction"] = self.metric_direction.value
-        return data
+        return _serialize_dataclass(self)
 
     def to_index_record(self) -> dict[str, Any]:
         return {
@@ -91,4 +134,17 @@ class Manifest:
             "metric_value": self.metric_value,
             "metric_direction": self.metric_direction.value,
             "timestamp": self.timestamp,
+            "parent_id": self.parent_id,
         }
+
+
+def _serialize_dataclass(value: Any) -> Any:
+    if isinstance(value, Enum):
+        return value.value
+    if isinstance(value, list):
+        return [_serialize_dataclass(item) for item in value]
+    if isinstance(value, dict):
+        return {key: _serialize_dataclass(item) for key, item in value.items()}
+    if hasattr(value, "__dataclass_fields__"):
+        return {key: _serialize_dataclass(item) for key, item in asdict(value).items()}
+    return value

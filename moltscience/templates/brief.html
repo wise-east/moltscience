@@ -1,10 +1,11 @@
 {% extends "base.html" %}
-{% block title %}MoltScience · {{ problem }} brief{% endblock %}
+{% block title %}MoltScience · {{ problem.title }} brief{% endblock %}
 {% block content %}
   <div class="card">
-    <h1>{{ problem }} brief</h1>
+    <h1>{{ problem.title }} brief</h1>
     <div class="meta">
-      <a class="chip" href="/p/{{ problem }}">Back to feed</a>
+      <a class="chip" href="/p/{{ problem.name }}">Back to feed</a>
+      <span class="flair">{{ problem.metric_name }} · {{ problem.metric_direction }}</span>
     </div>
   </div>
   <div class="card" style="margin-top: 16px;">

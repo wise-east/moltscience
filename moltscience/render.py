@@ -4,26 +4,26 @@ from typing import Any
 
 
 def render_experiment(experiment: dict[str, Any], level: int = 0) -> str:
-    metric = (
-        f'{experiment["metric_name"]}={experiment["metric_value"]} '
-        f'({"lower" if experiment["metric_direction"] == "lower_is_better" else "higher"}=better)'
-    )
+    direction = "lower" if experiment["metric_direction"] == "lower_is_better" else "higher"
     lines = [
-        f'[{experiment["id"]}] {experiment["status"]} | {metric} | '
+        f'[{experiment["id"]}] {experiment["status"]} | '
+        f'{experiment["metric_name"]}={experiment["metric_value"]} ({direction}=better) | '
         f'"{experiment["title"]}" | {experiment["agent"]} | {experiment["timestamp"]}'
     ]
+    if experiment.get("parent_id"):
+        lines.append(f'Parent: {experiment["parent_id"]}')
     if level >= 1:
         lines.extend(
             [
-                f"Methodology: {experiment.get('methodology', '') or '(none)'}",
+                f"Methodology: {experiment.get('methodology') or '(none)'}",
                 "Code patch:",
-                experiment.get("code_patch", "") or "(none)",
+                experiment.get("code_patch") or "(none)",
             ]
         )
     if level >= 2:
         lines.extend(
             [
-                f"Motivation: {experiment.get('motivation', '') or '(none)'}",
+                f"Motivation: {experiment.get('motivation') or '(none)'}",
                 f"Hypotheses: {experiment.get('hypotheses', [])}",
                 f"Related experiments: {experiment.get('related_experiments', [])}",
                 f"Sub-experiments: {experiment.get('sub_experiments', [])}",
@@ -32,7 +32,7 @@ def render_experiment(experiment: dict[str, Any], level: int = 0) -> str:
     if level >= 3:
         lines.append(f"Results: {experiment.get('results', {})}")
     if level >= 4:
-        lines.append(f"Execution log:\n{experiment.get('execution_log', '') or '(none)'}")
+        lines.append(f"Execution log:\n{experiment.get('execution_log') or '(none)'}")
     if level >= 5:
         lines.append(f"Resources: {experiment.get('resources', {})}")
     return "\n".join(lines)
