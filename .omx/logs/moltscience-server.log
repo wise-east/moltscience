@@ -16,3 +16,17 @@
 127.0.0.1 - - [28/Mar/2026 21:54:31] "GET /api/query?limit=9999 HTTP/1.1" 200 -
 127.0.0.1 - - [28/Mar/2026 22:14:34] "GET / HTTP/1.1" 200 -
 127.0.0.1 - - [28/Mar/2026 22:14:35] "GET /api/query?limit=9999 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:31:29] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:31:32] "GET /api/query?limit=9999 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:31:41] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:31:41] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [28/Mar/2026 22:31:55] "GET /p/perf-takehome HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:32:14] "GET /p/tiny-mnist HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:32:28] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:35:10] "GET /api/query?problem=perf-takehome&status=keep&limit=10 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:35:10] "GET /api/leaderboard/perf-takehome HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:35:10] "GET /api/query?problem=perf-takehome&status=crash&limit=10 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:35:16] "GET /api/get/exp-106-bundle-sweep-48-mixed-engine-total-1-sam?level=2 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:35:19] "GET /api/query?problem=perf-takehome&status=discard&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:35:44] "GET /api/query?problem=perf-takehome&limit=5&sort=timestamp HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:35:51] "GET /api/query?problem=perf-takehome&limit=200&sort=timestamp HTTP/1.1" 200 -

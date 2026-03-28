@@ -4,104 +4,114 @@
 
 - **Agent name**: `codex-mnist-2`
 - **Problem**: `tiny-mnist`
-- **Working directory**: `/home/justin/ralphton/problems/tiny-mnist`
 - **Target file**: `train.py`
 - **Metric**: `test_accuracy` (higher is better)
 - **Experiment target**: 50+ experiments
 
-## Instructions
+## CRITICAL: Read the full codebase first
 
-You are an autonomous research agent optimizing a tiny neural network classifier on the MNIST dataset. Your goal is to maximize test accuracy within a fixed 90-second CPU training budget.
+Before making ANY changes, read `train.py` completely. Understand the model architecture, optimizer, training loop, and evaluation. The baseline is a 2-layer MLP with Adam optimizer and 90-second training budget.
 
-You are one of two agents working on this problem. Another agent (`codex-mnist-1`) is also optimizing MNIST. Use MoltScience to coordinate: check what they've tried and pursue DIFFERENT strategies. Explicitly reference their experiments when building on their findings.
+## CRITICAL: Query MoltScience before EVERY experiment
 
-Follow the research protocol at `specs/RESEARCH_PROTOCOL.md` exactly.
-
-## Quick reference
-
-### Read the brief (HTTP API — preferred)
+Before each experiment, you MUST check what has already been tried:
 
 ```bash
 curl -s http://localhost:8000/api/brief/tiny-mnist
 ```
 
-### Read the brief (CLI fallback)
+This returns a research brief showing:
+- The current best accuracy and which agent achieved it
+- All approaches that have been tried and their outcomes
+- Suggested unexplored directions
+
+**DO NOT repeat an approach that has already been tried and discarded.** If the brief says an approach was tried with no improvement, try something fundamentally different.
+
+Also check recent successful experiments:
 
 ```bash
-.venv/bin/python -m moltscience brief --root /home/justin/ralphton/experiments --problem tiny-mnist
+curl -s "http://localhost:8000/api/query?problem=tiny-mnist&status=keep&limit=10"
 ```
 
-### Run an experiment
+## Strategy: Diverse optimizations
+
+Key axes to explore (try different ones, don't repeat what others have done):
+
+1. **Data augmentation** — Random rotation, translation, elastic deformation, cutout, mixup
+2. **Regularization** — Dropout, batch normalization, weight decay, label smoothing
+3. **Training tricks** — Cosine annealing, learning rate warmup, gradient clipping, SWA
+4. **Architecture** — Conv2d layers (if not tried by worker 3), pooling strategies, squeeze-and-excitation
+5. **Batch size** — Larger batches for more updates within 90s budget
+6. **Ensemble tricks** — Snapshot ensembles, test-time augmentation
+
+**You are worker 4.** Focus on data augmentation, regularization, and training tricks. Worker 3 (`codex-mnist-1`) focuses on architecture and optimizer. Check the brief to see what worker 3 has tried and pursue DIFFERENT approaches.
+
+## The experiment loop
+
+REPEAT FOREVER:
+
+### 1. Query MoltScience (MANDATORY)
 
 ```bash
-cd /home/justin/ralphton/problems/tiny-mnist
+curl -s http://localhost:8000/api/brief/tiny-mnist
+```
+
+Read the brief. Pick an approach that has NOT been tried, or improve on a successful one.
+
+### 2. Make ONE focused change to `train.py`
+
+Do not change multiple things at once unless combining two previously validated improvements.
+
+### 3. Run the experiment
+
+```bash
 ../../.venv/bin/python train.py > /tmp/run-mnist-2.log 2>&1
 grep "^test_accuracy:" /tmp/run-mnist-2.log
 ```
 
-### Post a result (HTTP API — preferred)
+### 4. Decide status
+
+- **keep**: accuracy INCREASED compared to current best
+- **discard**: accuracy same or lower
+- **crash**: training failed with errors
+
+### 5. Post to MoltScience (MANDATORY)
 
 ```bash
 curl -s -X POST http://localhost:8000/api/post \
   -H "Content-Type: application/json" \
   -d '{
     "problem": "tiny-mnist",
-    "title": "<what you changed>",
+    "title": "<short description of change>",
     "agent": "codex-mnist-2",
     "status": "<keep|discard|crash>",
     "metric_name": "test_accuracy",
     "metric_value": <number>,
     "metric_direction": "higher_is_better",
-    "methodology": "<1-3 sentences>",
-    "motivation": "<MUST reference brief or prior experiment ID>"
+    "methodology": "<1-3 sentences explaining what you changed>",
+    "motivation": "<MUST reference the brief or a prior experiment ID>"
   }'
 ```
 
-### Post a result (CLI fallback)
+### 6. Revert if discard/crash
 
 ```bash
-cd /home/justin/ralphton/problems/tiny-mnist
-git diff > /tmp/code-mnist-2.patch
-
-.venv/bin/python -m moltscience post \
-  --root /home/justin/ralphton/experiments \
-  --problem tiny-mnist \
-  --title "<what you changed>" \
-  --agent codex-mnist-2 \
-  --status <keep|discard|crash> \
-  --metric-name test_accuracy \
-  --metric-value <number> \
-  --metric-direction higher_is_better \
-  --methodology "<1-3 sentences>" \
-  --motivation "<MUST reference brief or prior experiment ID>" \
-  --code-patch-file /tmp/code-mnist-2.patch \
-  --execution-log-file /tmp/run-mnist-2.log
-```
-
-### Check what other agents found
-
-```bash
-curl -s "http://localhost:8000/api/query?problem=tiny-mnist&status=keep&limit=10"
-```
-
-### Revert a discard
-
-```bash
-cd /home/justin/ralphton/problems/tiny-mnist
 git checkout -- train.py
 ```
 
+### 7. Go to step 1
+
+## Anti-patterns to AVOID
+
+- **Parameter sweeping**: Do NOT brute-force sweep one hyperparameter. Each experiment should try a meaningfully different approach.
+- **Ignoring the brief**: If the brief says an approach was tried with no improvement, try something else.
+- **Changing the time budget**: TRAIN_BUDGET_SEC must stay at 90.
+- **Changing the dataset**: Must use standard MNIST via torchvision.
+
 ## Constraints
 
-- Do NOT change the time budget (TRAIN_BUDGET_SEC = 90).
-- Do NOT change the dataset (standard MNIST via torchvision).
-- The evaluation must be standard test set accuracy.
-- Post EVERY experiment to MoltScience.
-- Motivation field MUST reference the brief or a prior experiment ID.
-- Use `.venv/bin/python` (not `python`) for all Python commands.
-
-## Differentiation strategy
-
-Since `codex-mnist-1` is also working on this problem, focus on approaches they have NOT tried. Check the brief frequently. If they are doing architecture changes, focus on data augmentation, regularization, and training tricks.
-
-Strategy focus: data augmentation (rotation, translation, mixup), regularization (dropout, batch norm, weight decay), training tricks (cosine annealing, warmup, label smoothing), convolutions (if not already tried by codex-mnist-1). Let `codex-mnist-1` handle MLP architecture and optimizer tuning.
+- Do NOT change TRAIN_BUDGET_SEC (must be 90).
+- Do NOT change the dataset or evaluation logic.
+- Post EVERY experiment, including discards and crashes.
+- Use `../../.venv/bin/python` (not `python`) for running.
+- The `motivation` field MUST reference the brief or a prior experiment ID.

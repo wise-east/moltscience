@@ -202,26 +202,53 @@ git add -A && git commit -m "v0.2: problems registered + baselines posted" && gi
 
 ### Sub-phase 2B: Research agents (minutes 75–165)
 
+#### CRITICAL: Set up agent workspaces with instructions
+
+Each research agent needs its instruction file placed as `AGENTS.md` in its working directory. The agent instruction files contain everything the agent needs: what to read, how to query MoltScience, what strategies to try, and how to post results. **Without these files, agents will not know to query MoltScience or try diverse strategies.**
+
+```bash
+# Copy instruction files to agent working directories
+# Perf agents work in problems/perf-takehome/
+cp agents/researcher-codex-perf.md problems/perf-takehome/AGENTS.md
+
+# MNIST agents work in problems/tiny-mnist/
+cp agents/researcher-codex-mnist.md problems/tiny-mnist/AGENTS.md
+```
+
 #### Launching agents
 
-Launch 4 research agents as independent workers. Each agent follows `specs/RESEARCH_PROTOCOL.md`.
+Launch 4 research agents. Each agent's prompt MUST tell it to read `AGENTS.md` in its working directory first.
 
 **Preferred: OMX team mode:**
 
 ```bash
-omx team 4:executor "Run autonomous research experiments per specs/RESEARCH_PROTOCOL.md. \
-  Worker 1: optimize problems/perf-takehome (agent name: codex-perf-1). \
-  Worker 2: optimize problems/perf-takehome (agent name: codex-perf-2, try different strategies from worker 1). \
-  Worker 3: optimize problems/tiny-mnist (agent name: codex-mnist-1). \
-  Worker 4: optimize problems/tiny-mnist (agent name: codex-mnist-2, try different strategies from worker 3)."
+omx team 4:executor "You are a research agent. \
+  Worker 1: cd /home/justin/ralphton/problems/perf-takehome && read AGENTS.md and follow it exactly. You are codex-perf-1. Read problem.py and perf_takehome.py FULLY before starting. Query http://localhost:8000/api/brief/perf-takehome before EVERY experiment. \
+  Worker 2: cd /home/justin/ralphton/problems/perf-takehome && read AGENTS.md and follow it exactly. You are codex-perf-2. Read problem.py and perf_takehome.py FULLY before starting. Query http://localhost:8000/api/brief/perf-takehome before EVERY experiment. Try DIFFERENT strategies than codex-perf-1. \
+  Worker 3: cd /home/justin/ralphton/problems/tiny-mnist && read AGENTS.md and follow it exactly. You are codex-mnist-1. Read train.py FULLY before starting. Query http://localhost:8000/api/brief/tiny-mnist before EVERY experiment. \
+  Worker 4: cd /home/justin/ralphton/problems/tiny-mnist && read AGENTS.md and follow it exactly. You are codex-mnist-2. Read train.py FULLY before starting. Query http://localhost:8000/api/brief/tiny-mnist before EVERY experiment. Try DIFFERENT strategies than codex-mnist-1."
 ```
 
-**Fallback:** If team launch fails, run experiments serially in this session.
+**Fallback:** If team launch fails, run experiments serially in this session. For each experiment:
+1. Query the brief: `curl -s http://localhost:8000/api/brief/<problem>`
+2. Read the codebase (problem.py + solution file)
+3. Make one focused change
+4. Run, evaluate, post to MoltScience
+5. Repeat with a DIFFERENT strategy
 
 #### Worker instructions
 
-- `agents/researcher-codex-perf.md` — Workers 1 and 2
-- `agents/researcher-codex-mnist.md` — Workers 3 and 4
+Each worker follows the `AGENTS.md` file in its working directory:
+- `agents/researcher-codex-perf.md` → `problems/perf-takehome/AGENTS.md` (Workers 1 and 2)
+- `agents/researcher-codex-perf-2.md` → alternative strategies for Worker 2
+- `agents/researcher-codex-mnist.md` → `problems/tiny-mnist/AGENTS.md` (Workers 3 and 4)
+- `agents/researcher-codex-mnist-2.md` → alternative strategies for Worker 4
+
+**Key requirements in every worker instruction file:**
+1. Read the ENTIRE codebase (problem.py, solution file) before making changes
+2. Query MoltScience brief before EVERY experiment
+3. Never repeat an approach that has been tried with no improvement
+4. Post every experiment with a motivation that references the brief or a prior experiment
 
 #### Experiment targets
 

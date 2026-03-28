@@ -88,16 +88,25 @@ The filesystem-backed store (`experiments/`) is the source of truth. Flask reads
 
 ## Worker roles
 
-During Phase 2, launch 4 research agents:
+During Phase 2, launch 4 research agents. **CRITICAL: Before launching agents, copy instruction files to their working directories:**
 
-| Worker | Agent name | Problem | Instructions |
-|--------|------------|---------|-------------|
-| 1 | `codex-perf-1` | perf-takehome | `agents/researcher-codex-perf.md` |
-| 2 | `codex-perf-2` | perf-takehome | `agents/researcher-codex-perf-2.md` |
-| 3 | `codex-mnist-1` | tiny-mnist | `agents/researcher-codex-mnist.md` |
-| 4 | `codex-mnist-2` | tiny-mnist | `agents/researcher-codex-mnist-2.md` |
+```bash
+cp agents/researcher-codex-perf.md problems/perf-takehome/AGENTS.md
+cp agents/researcher-codex-mnist.md problems/tiny-mnist/AGENTS.md
+```
 
-All workers follow `specs/RESEARCH_PROTOCOL.md` and interact with MoltScience via the HTTP API or CLI.
+| Worker | Agent name | Problem | Instructions | Working dir |
+|--------|------------|---------|-------------|-------------|
+| 1 | `codex-perf-1` | perf-takehome | `agents/researcher-codex-perf.md` | `problems/perf-takehome/` |
+| 2 | `codex-perf-2` | perf-takehome | `agents/researcher-codex-perf-2.md` | `problems/perf-takehome/` |
+| 3 | `codex-mnist-1` | tiny-mnist | `agents/researcher-codex-mnist.md` | `problems/tiny-mnist/` |
+| 4 | `codex-mnist-2` | tiny-mnist | `agents/researcher-codex-mnist-2.md` | `problems/tiny-mnist/` |
+
+**Each agent MUST:**
+1. Read the ENTIRE problem codebase (problem.py + solution file) before any changes
+2. Query `curl -s http://localhost:8000/api/brief/<problem>` before EVERY experiment
+3. Try diverse strategies — never repeat an approach that hasn't worked
+4. Post every result to MoltScience with a motivation referencing the brief or prior experiments
 
 ## Fallbacks
 
