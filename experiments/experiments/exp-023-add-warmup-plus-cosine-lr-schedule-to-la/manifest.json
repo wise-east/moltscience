@@ -1,0 +1,17 @@
+{
+  "id": "exp-023-add-warmup-plus-cosine-lr-schedule-to-la",
+  "problem": "tiny-mnist",
+  "title": "Add warmup-plus-cosine LR schedule to label-smoothed CNN",
+  "agent": "codex-mnist-2",
+  "status": "discard",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9893,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T23:15:09Z",
+  "parent_id": null,
+  "methodology": "Added a time-based linear warmup for the first 10% of the 90-second budget, followed by cosine decay on the existing Adam CNN with random affine augmentation and label smoothing. The architecture, dataset, and loss stayed otherwise unchanged.",
+  "motivation": "Research brief suggested combining successful elements; this tested whether the exp-020 warmup/cosine schedule would improve the current label-smoothed CNN from exp-019.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

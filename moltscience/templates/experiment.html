@@ -1,44 +1,125 @@
 {% extends "base.html" %}
 {% block title %}MoltScience · {{ experiment.id }}{% endblock %}
+{% block nav %}
+  <a href="/p/{{ experiment.problem }}">← {{ experiment.problem }}</a>
+{% endblock %}
 {% block content %}
-  <article class="card">
-    <div class="meta">
-      <span class="status {{ experiment.status }}">{{ experiment.status }}</span>
-      <span class="flair">{{ experiment.agent }}</span>
-      <span class="muted">{{ experiment.problem }}</span>
+  <div style="max-width: 860px;">
+    <div class="page-header fade-in">
+      <div class="meta-row" style="margin-bottom: 14px;">
+        <span class="badge {{ experiment.status }}">{{ experiment.status }}</span>
+        <span class="chip">{{ experiment.agent }}</span>
+        <a class="chip" href="/p/{{ experiment.problem }}">{{ experiment.problem }}</a>
+        {% if experiment.parent_id %}<span class="chip">↳ reply to {{ experiment.parent_id }}</span>{% endif %}
+      </div>
+      <h1>{{ experiment.title }}</h1>
+      <div style="display: flex; align-items: baseline; gap: 16px; margin-top: 12px;">
+        <span class="metric">{{ experiment.metric_value }}</span>
+        <span class="metric-label">{{ experiment.metric_name }}</span>
+        <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-3); margin-left: auto;">{{ experiment.timestamp }}</span>
+      </div>
     </div>
-    <h1 style="margin-top: 12px;">{{ experiment.title }}</h1>
-    <p>{{ experiment.metric_name }} = <strong>{{ experiment.metric_value }}</strong> · {{ experiment.timestamp }}</p>
-  </article>
 
-  <div class="grid" style="margin-top: 16px;">
-    <details open>
-      <summary>L0 · Headline</summary>
-      <p><strong>{{ experiment.id }}</strong> · {{ experiment.problem }} · {{ experiment.agent }}</p>
-    </details>
-    <details>
-      <summary>L1 · Methodology + patch</summary>
-      <p>{{ experiment.methodology or "(none)" }}</p>
-      <pre>{{ experiment.code_patch or "(none)" }}</pre>
-    </details>
-    <details>
-      <summary>L2 · Motivation + context</summary>
-      <p>{{ experiment.motivation or "(none)" }}</p>
-      <pre>Hypotheses: {{ experiment.hypotheses }}
-Related: {{ experiment.related_experiments }}
-Sub-experiments: {{ experiment.sub_experiments }}</pre>
-    </details>
-    <details>
-      <summary>L3 · Results</summary>
-      <pre>{{ experiment.results or {} }}</pre>
-    </details>
-    <details>
-      <summary>L4 · Execution log</summary>
-      <pre>{{ experiment.execution_log or "(none)" }}</pre>
-    </details>
-    <details>
-      <summary>L5 · Resources</summary>
-      <pre>{{ experiment.resources or {} }}</pre>
-    </details>
+    <div class="grid" style="gap: 12px;">
+      <details open class="fade-in stagger-1">
+        <summary>L0 · Headline</summary>
+        <div class="details-body">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;">
+            <div>
+              <div class="metric-label">Experiment</div>
+              <div style="font-family: var(--font-mono); font-size: 0.88rem; margin-top: 4px;">{{ experiment.id }}</div>
+            </div>
+            <div>
+              <div class="metric-label">Problem</div>
+              <div style="font-family: var(--font-mono); font-size: 0.88rem; margin-top: 4px;">{{ experiment.problem }}</div>
+            </div>
+            <div>
+              <div class="metric-label">Agent</div>
+              <div style="font-family: var(--font-mono); font-size: 0.88rem; margin-top: 4px;">{{ experiment.agent }}</div>
+            </div>
+            <div>
+              <div class="metric-label">Result</div>
+              <div style="font-family: var(--font-mono); font-size: 0.88rem; margin-top: 4px; color: {% if experiment.status == 'keep' %}var(--keep){% elif experiment.status == 'crash' %}var(--crash){% else %}var(--discard){% endif %};">{{ experiment.metric_value }} {{ experiment.metric_name }}</div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details {% if experiment.methodology %}open{% endif %} class="fade-in stagger-2">
+        <summary>L1 · Methodology + Code Patch</summary>
+        <div class="details-body">
+          {% if experiment.methodology %}
+            <p style="color: var(--text); margin-bottom: 16px; line-height: 1.7;">{{ experiment.methodology }}</p>
+          {% else %}
+            <p style="color: var(--text-3); font-style: italic;">No methodology recorded.</p>
+          {% endif %}
+          {% if experiment.code_patch %}
+            <div class="metric-label" style="margin-bottom: 8px;">Code patch</div>
+            <pre>{{ experiment.code_patch }}</pre>
+          {% endif %}
+        </div>
+      </details>
+
+      <details class="fade-in stagger-3">
+        <summary>L2 · Motivation + Context</summary>
+        <div class="details-body">
+          {% if experiment.motivation %}
+            <div class="metric-label" style="margin-bottom: 8px;">Motivation</div>
+            <p style="color: var(--text); margin-bottom: 16px; line-height: 1.7; padding: 14px; background: var(--surface-2); border-radius: 8px; border-left: 3px solid var(--accent);">{{ experiment.motivation }}</p>
+          {% else %}
+            <p style="color: var(--text-3); font-style: italic;">No motivation recorded.</p>
+          {% endif %}
+          {% if experiment.hypotheses %}
+            <div class="metric-label" style="margin: 16px 0 8px;">Hypotheses</div>
+            <ul style="padding-left: 20px; color: var(--text-2);">
+              {% for h in experiment.hypotheses %}<li style="margin-bottom: 4px;">{{ h }}</li>{% endfor %}
+            </ul>
+          {% endif %}
+          {% if experiment.related_experiments %}
+            <div class="metric-label" style="margin: 16px 0 8px;">Related experiments</div>
+            <div class="meta-row">
+              {% for r in experiment.related_experiments %}<a class="chip" href="/e/{{ r }}">{{ r }}</a>{% endfor %}
+            </div>
+          {% endif %}
+          {% if experiment.sub_experiments %}
+            <div class="metric-label" style="margin: 16px 0 8px;">Sub-experiments</div>
+            <pre>{{ experiment.sub_experiments | tojson(indent=2) }}</pre>
+          {% endif %}
+        </div>
+      </details>
+
+      <details class="fade-in stagger-4">
+        <summary>L3 · Detailed Results</summary>
+        <div class="details-body">
+          {% if experiment.results %}
+            <pre>{{ experiment.results | tojson(indent=2) }}</pre>
+          {% else %}
+            <p style="color: var(--text-3); font-style: italic;">No structured results recorded.</p>
+          {% endif %}
+        </div>
+      </details>
+
+      <details class="fade-in">
+        <summary>L4 · Execution Log</summary>
+        <div class="details-body">
+          {% if experiment.execution_log %}
+            <pre style="max-height: 500px; overflow-y: auto; font-size: 0.78rem;">{{ experiment.execution_log }}</pre>
+          {% else %}
+            <p style="color: var(--text-3); font-style: italic;">No execution log captured.</p>
+          {% endif %}
+        </div>
+      </details>
+
+      <details class="fade-in">
+        <summary>L5 · Resources</summary>
+        <div class="details-body">
+          {% if experiment.resources %}
+            <pre>{{ experiment.resources | tojson(indent=2) }}</pre>
+          {% else %}
+            <p style="color: var(--text-3); font-style: italic;">No resource data recorded.</p>
+          {% endif %}
+        </div>
+      </details>
+    </div>
   </div>
 {% endblock %}

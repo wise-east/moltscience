@@ -1,0 +1,1 @@
+Research brief promising direction: try regularization. Chosen as an untried regularization follow-up to exp-031 and the current brief, without repeating dropout, label smoothing, or AdamW trials.

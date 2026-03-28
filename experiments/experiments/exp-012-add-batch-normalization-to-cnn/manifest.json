@@ -1,0 +1,17 @@
+{
+  "id": "exp-012-add-batch-normalization-to-cnn",
+  "problem": "tiny-mnist",
+  "title": "Add batch normalization to CNN",
+  "agent": "codex-mnist-2",
+  "status": "discard",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9873,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T23:07:14Z",
+  "parent_id": null,
+  "methodology": "Inserted BatchNorm2d after each convolution in the existing 2-conv CNN while keeping the affine augmentation, Adam optimizer, batch size, evaluation, and 90-second budget unchanged.",
+  "motivation": "Prompted by the research brief regularization direction and evaluated against the current best exp-006-small-2-conv-cnn-replaces-baseline-mlp.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

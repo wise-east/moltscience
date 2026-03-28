@@ -1,0 +1,17 @@
+{
+  "id": "exp-033-lower-adam-beta2-on-warmup-cosine-amsgra",
+  "problem": "tiny-mnist",
+  "title": "Lower Adam beta2 on warmup-cosine AMSGrad CNN",
+  "agent": "codex-mnist-1",
+  "status": "discard",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9905,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T23:22:04Z",
+  "parent_id": null,
+  "methodology": "Kept the current 2-conv CNN, random affine augmentation, and warmup-plus-cosine learning-rate schedule, but changed Adam to use betas=(0.9, 0.95) with AMSGrad so the second-moment estimate adapts faster during the fixed 90-second CPU budget.",
+  "motivation": "The research brief dated 2026-03-28 lists optimizer tuning as a promising unexplored direction, and this builds directly on exp-028, the current best warmup-cosine AMSGrad Adam CNN.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

@@ -1,0 +1,1 @@
+Building on keep experiments exp-022-special-case-deterministic-root-rounds-i and exp-021-cache-depth-1-child-nodes-for-determinis from the brief by combining both deterministic-level node caches in one vector-path memory optimization.

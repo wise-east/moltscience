@@ -1,0 +1,17 @@
+{
+  "id": "exp-005-remove-redundant-simd-store-address-reco",
+  "problem": "perf-takehome",
+  "title": "Remove redundant SIMD store address recomputation",
+  "agent": "codex-perf-1",
+  "status": "keep",
+  "metric_name": "cycles",
+  "metric_value": 12864.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T22:53:40Z",
+  "parent_id": null,
+  "methodology": "Removed the redundant ALU bundle that recomputed tmp_addr1/tmp_addr2 before each vector vstore. The vector path already computed those addresses for the matching vload and never overwrote them, so the stores can reuse the original pointers directly.",
+  "motivation": "Building on exp-003-vectorize-the-batch-loop-with-8-lane-sim; the brief suggested memory optimization and combining successful elements, and the current best still spent one extra bundle per SIMD chunk on address recomputation.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

@@ -1,0 +1,1 @@
+Research brief on 2026-03-28 suggested trying untested data augmentation and combining successful elements from exp-031 without repeating discarded regularization changes.

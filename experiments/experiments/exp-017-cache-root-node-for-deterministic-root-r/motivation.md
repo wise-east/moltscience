@@ -1,0 +1,1 @@
+Research brief suggested memory optimization, and this builds on exp-013 by targeting the repeated root accesses that still remained in the current best interchanged SIMD kernel.

@@ -1,0 +1,1 @@
+Brief suggested combining successful elements from the current best experiments; this combines exp-022 deterministic root specialization with the depth-1 node caching direction from exp-021 in a single top-of-tree memory optimization.

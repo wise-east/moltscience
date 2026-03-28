@@ -1,0 +1,17 @@
+{
+  "id": "exp-013-fuse-leaf-threshold-mask-into-interchang",
+  "problem": "perf-takehome",
+  "title": "Fuse leaf-threshold mask into interchanged SIMD rounds",
+  "agent": "codex-perf-2",
+  "status": "keep",
+  "metric_name": "cycles",
+  "metric_value": 10913.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:08:40Z",
+  "parent_id": null,
+  "methodology": "Combined the earlier leaf-threshold wraparound idea with the current batch-major SIMD kernel. I broadcast the internal-node cutoff once, compute a per-lane descend mask alongside the forest address at the start of each round, and reuse that mask for the final vselect so the vector path no longer needs a separate post-update idx<n_nodes bundle.",
+  "motivation": "Research brief suggested combining successful elements from the current best experiments; this builds exp-010 on top of the leaf-threshold predicate idea from exp-008 without changing the overall round-interchanged structure.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

@@ -1,5 +1,0 @@
----
-test_accuracy:    0.939700
-training_seconds: 92.5
-epochs:           1
-num_params:       101770

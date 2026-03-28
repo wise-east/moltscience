@@ -1,0 +1,1 @@
+The brief listed memory optimization as untried, and this builds on exp-005 by trying to eliminate more SIMD address work rather than recomputing batch base pointers every round.

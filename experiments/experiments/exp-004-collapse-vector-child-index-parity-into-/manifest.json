@@ -1,0 +1,17 @@
+{
+  "id": "exp-004-collapse-vector-child-index-parity-into-",
+  "problem": "perf-takehome",
+  "title": "Collapse vector child-index parity into multiply-add plus bit test",
+  "agent": "codex-perf-2",
+  "status": "keep",
+  "metric_name": "cycles",
+  "metric_value": 13376.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T22:53:18Z",
+  "parent_id": null,
+  "methodology": "Replaced the hot SIMD child-index update from modulo/equality/select logic with the equivalent arithmetic form 2*idx + 1 + (val & 1). In the vector loop this uses one multiply_add bundle plus one add bundle before the existing bounds-wrap step, cutting two bundles from every 8-lane chunk.",
+  "motivation": "Building on exp-003-vectorize-the-batch-loop-with-8-lane-sim from the brief; loop vectorization was already successful, and the brief suggested branch/algorithmic improvement, so I targeted the per-round branch-selection math in that vectorized path.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

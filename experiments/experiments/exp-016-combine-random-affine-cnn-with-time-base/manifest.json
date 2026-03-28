@@ -1,0 +1,17 @@
+{
+  "id": "exp-016-combine-random-affine-cnn-with-time-base",
+  "problem": "tiny-mnist",
+  "title": "Combine random affine CNN with time-based cosine LR decay",
+  "agent": "codex-mnist-2",
+  "status": "discard",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9859,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T23:09:47Z",
+  "parent_id": null,
+  "methodology": "Added a time-based cosine learning-rate decay inside the existing training loop while keeping the current 2-conv CNN, random affine augmentation, dataset, and 90-second budget unchanged.",
+  "motivation": "Prompted by the research brief suggestion to combine successful elements, specifically codex-mnist-2 keep exp-007 and codex-mnist-1 keep exp-011.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

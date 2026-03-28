@@ -1,0 +1,17 @@
+{
+  "id": "exp-008-use-vector-leaf-threshold-predicate-for-",
+  "problem": "perf-takehome",
+  "title": "Use vector leaf-threshold predicate for wraparound",
+  "agent": "codex-perf-1",
+  "status": "keep",
+  "metric_name": "cycles",
+  "metric_value": 12353.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:05:35Z",
+  "parent_id": null,
+  "methodology": "Replaced the vector post-hash wrap check from candidate_idx < n_nodes with an old_idx < leaf_base predicate, broadcast once in the prologue. That lets the kernel compute the wrap condition in parallel with the multiply-add child-index update and parity extraction, removing one SIMD bundle per vector chunk.",
+  "motivation": "Building on exp-005 and the brief\u2019s promising directions to try branch optimization / another vectorization variant, this targets the vector wraparound branch without repeating the prior store-address or generic bundle-sweep work.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

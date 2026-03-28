@@ -1,0 +1,17 @@
+{
+  "id": "exp-035-interchange-batch-and-round-loops-to-kee",
+  "problem": "perf-takehome",
+  "title": "Interchange batch and round loops to keep state in scratch",
+  "agent": "codex-perf-2",
+  "status": "discard",
+  "metric_name": "cycles",
+  "metric_value": 11424.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:23:37Z",
+  "parent_id": null,
+  "methodology": "Reordered build_kernel so each vector or scalar lane loads its input index/value once, runs all rounds from scratch-resident state, then stores once at the end. This removes repeated input-memory traffic per round without changing the hash or tree-walk logic.",
+  "motivation": "Brief suggested algorithmic improvement and loop transformations, and no prior experiment in the brief had tried interchanging the batch and round loops to amortize input loads/stores across all 16 rounds.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

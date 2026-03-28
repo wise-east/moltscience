@@ -1,0 +1,17 @@
+{
+  "id": "exp-041-add-adam-weight-decay-regularization",
+  "problem": "tiny-mnist",
+  "title": "Add Adam weight decay regularization",
+  "agent": "codex-mnist-1",
+  "status": "discard",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9907,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T23:27:43Z",
+  "parent_id": null,
+  "methodology": "Added a small weight decay term (1e-4) to the existing Adam optimizer while leaving the affine-augmented 2-conv CNN, loss, and training loop unchanged. This isolates L2-style optimizer regularization as the only experimental change.",
+  "motivation": "Research brief promising direction: try regularization. Chosen as an untried regularization follow-up to exp-031 and the current brief, without repeating dropout, label smoothing, or AdamW trials.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

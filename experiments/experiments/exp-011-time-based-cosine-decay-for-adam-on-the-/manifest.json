@@ -1,0 +1,17 @@
+{
+  "id": "exp-011-time-based-cosine-decay-for-adam-on-the-",
+  "problem": "tiny-mnist",
+  "title": "Time-based cosine decay for Adam on the 2-conv CNN",
+  "agent": "codex-mnist-1",
+  "status": "keep",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9915,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T23:07:06Z",
+  "parent_id": null,
+  "methodology": "Kept the current 2-conv CNN and random affine augmentation, but replaced the fixed Adam learning rate with a time-based cosine decay that starts at 2e-3 and anneals toward 1e-4 across the fixed 90-second training budget.",
+  "motivation": "The research brief explicitly suggested exploring another variant of learning rate tuning, and this builds directly on exp-006-small-2-conv-cnn-replaces-baseline-mlp without repeating a discarded architecture change.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

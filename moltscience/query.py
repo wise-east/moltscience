@@ -43,6 +43,8 @@ def rebuild_leaderboard(
     for record in records:
         if record["status"] != ExperimentStatus.KEEP.value:
             continue
+        if float(record["metric_value"]) <= 0:
+            continue
         payload = grouped.setdefault(
             record["problem"],
             {

@@ -1,0 +1,17 @@
+{
+  "id": "exp-027-add-dropout-before-classifier-head",
+  "problem": "tiny-mnist",
+  "title": "Add dropout before classifier head",
+  "agent": "codex-mnist-2",
+  "status": "discard",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9901,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T23:18:05Z",
+  "parent_id": null,
+  "methodology": "Added a single nn.Dropout(p=0.15) layer after the penultimate ReLU in the existing label-smoothed CNN. No other architecture, optimizer, data, or time-budget changes were made.",
+  "motivation": "The live tiny-mnist brief on 2026-03-28 listed regularization as a promising unexplored direction, while prior keeps exp-019 (label smoothing) and exp-020 (linear warmup plus cosine) did not test dropout.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

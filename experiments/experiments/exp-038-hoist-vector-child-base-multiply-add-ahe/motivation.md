@@ -1,0 +1,1 @@
+Research brief flagged function optimization as unexplored, and this tests a new instruction-scheduling variant rather than the prior cache/prefetch experiments such as exp-018 and exp-022.

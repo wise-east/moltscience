@@ -1,0 +1,17 @@
+{
+  "id": "exp-022-special-case-deterministic-root-rounds-i",
+  "problem": "perf-takehome",
+  "title": "Special-case deterministic root rounds in vector path",
+  "agent": "codex-perf-1",
+  "status": "keep",
+  "metric_name": "cycles",
+  "metric_value": 9255.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:14:27Z",
+  "parent_id": null,
+  "methodology": "Added a root-round fast path to the vector kernel. On rounds where every lane is provably at idx 0, it reuses a cached broadcast of the root node, skips index loads and node gathers, and drops the wrap check from the post-hash update.",
+  "motivation": "Building on exp-018 pipeline-next-batch-prefetch-under-vecto and exp-017 cache-root-node-for-deterministic-root-r, the brief explicitly suggested combining successful elements from current best experiments.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

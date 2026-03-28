@@ -1,0 +1,1 @@
+The brief explicitly suggested optimizer tuning, and this builds directly on exp-020-add-linear-warmup-before-cosine-decay-on, the prior best configuration.

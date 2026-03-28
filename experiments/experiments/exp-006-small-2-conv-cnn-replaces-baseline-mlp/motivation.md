@@ -1,0 +1,1 @@
+The brief explicitly suggested architecture search, and this experiment builds directly on exp-002-baseline-2-layer-mlp-with-adam by testing a stronger inductive bias for image structure.

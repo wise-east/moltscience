@@ -1,0 +1,17 @@
+{
+  "id": "exp-043-add-mixup-training-to-affine-warmup-cosi",
+  "problem": "tiny-mnist",
+  "title": "Add mixup training to affine warmup-cosine CNN",
+  "agent": "codex-mnist-2",
+  "status": "discard",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9932,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T23:28:16Z",
+  "parent_id": null,
+  "methodology": "Added batchwise mixup augmentation during training on top of the current affine-augmented CNN, mixing both images and labels while keeping label smoothing and the warmup-cosine Adam schedule unchanged.",
+  "motivation": "Research brief on 2026-03-28 suggested trying untested data augmentation and combining successful elements from exp-031 without repeating discarded regularization changes.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

@@ -1,0 +1,1 @@
+The brief suggested combining successful elements from the current best experiments; this combines exp-020 (warmup before cosine decay) with exp-019 (label smoothing).

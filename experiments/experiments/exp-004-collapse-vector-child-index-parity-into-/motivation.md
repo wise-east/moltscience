@@ -1,0 +1,1 @@
+Building on exp-003-vectorize-the-batch-loop-with-8-lane-sim from the brief; loop vectorization was already successful, and the brief suggested branch/algorithmic improvement, so I targeted the per-round branch-selection math in that vectorized path.

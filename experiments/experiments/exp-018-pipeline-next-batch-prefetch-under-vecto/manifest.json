@@ -1,0 +1,17 @@
+{
+  "id": "exp-018-pipeline-next-batch-prefetch-under-vecto",
+  "problem": "perf-takehome",
+  "title": "Pipeline next-batch prefetch under vector hash",
+  "agent": "codex-perf-1",
+  "status": "keep",
+  "metric_name": "cycles",
+  "metric_value": 9392.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:12:09Z",
+  "parent_id": null,
+  "methodology": "Added a two-buffer vector software pipeline in perf_takehome.py so the next SIMD batch\u2019s base-address setup, vloads, and gather-loads execute in parallel with the current batch\u2019s hash bundles. I also folded the final store-address recomputation into the bounds-check bundle so ALU slots stay occupied while the VALU compare runs.",
+  "motivation": "Research brief flagged memory optimization as unexplored, and this builds on exp-005 and exp-008 by reducing idle load/ALU cycles instead of repeating loop-interchange or predicate-fusion experiments.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

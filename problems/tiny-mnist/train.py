@@ -7,20 +7,31 @@ from torchvision import datasets, transforms
 
 TRAIN_BUDGET_SEC = 90
 
-transform = transforms.Compose([
+train_transform = transforms.Compose([
+    transforms.RandomAffine(degrees=10, translate=(0.1, 0.1)),
     transforms.ToTensor(),
     transforms.Normalize((0.1307,), (0.3081,))
 ])
-train_ds = datasets.MNIST("data", train=True, download=True, transform=transform)
-test_ds = datasets.MNIST("data", train=False, transform=transform)
+test_transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.1307,), (0.3081,))
+])
+train_ds = datasets.MNIST("data", train=True, download=True, transform=train_transform)
+test_ds = datasets.MNIST("data", train=False, transform=test_transform)
 train_loader = torch.utils.data.DataLoader(train_ds, batch_size=64, shuffle=True)
 test_loader = torch.utils.data.DataLoader(test_ds, batch_size=1000)
 
 model = nn.Sequential(
-    nn.Flatten(),
-    nn.Linear(784, 256),
+    nn.Conv2d(1, 32, kernel_size=3, padding=1),
     nn.ReLU(),
-    nn.Linear(256, 10)
+    nn.MaxPool2d(2),
+    nn.Conv2d(32, 64, kernel_size=3, padding=1),
+    nn.ReLU(),
+    nn.MaxPool2d(2),
+    nn.Flatten(),
+    nn.Linear(64 * 7 * 7, 128),
+    nn.ReLU(),
+    nn.Linear(128, 10)
 )
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)

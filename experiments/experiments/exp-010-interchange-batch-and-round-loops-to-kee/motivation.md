@@ -1,0 +1,1 @@
+The brief explicitly suggested algorithmic improvement. Building on the vectorized kernel from exp-005/exp-008, I targeted a different untried optimization by fusing rounds per batch chunk instead of tuning the inner round body.

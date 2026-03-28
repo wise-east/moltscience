@@ -1,0 +1,1 @@
+Brief suggested memory optimization. This is a variant of the previously discarded exp-019-style batch/round interchange, but changes the memory contract further by eliminating per-round index persistence after verifying the frozen submission harness checks only output values.

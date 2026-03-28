@@ -1,0 +1,1 @@
+Prompted by the research brief regularization direction and evaluated against the current best exp-006-small-2-conv-cnn-replaces-baseline-mlp.

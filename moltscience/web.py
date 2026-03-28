@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import html
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -49,6 +50,13 @@ def _metric_delta(record: dict[str, Any], baseline_value: float | None) -> str:
     return f"{delta:+.4g} ({pct:+.2f}%)"
 
 
+def _inline_markdown(text: str) -> str:
+    escaped = html.escape(text)
+    escaped = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escaped)
+    escaped = re.sub(r"`(.+?)`", r"<code>\1</code>", escaped)
+    return escaped
+
+
 def _brief_to_html(markdown_text: str) -> str:
     lines = markdown_text.splitlines()
     rendered: list[str] = []
@@ -64,24 +72,24 @@ def _brief_to_html(markdown_text: str) -> str:
             if in_list:
                 rendered.append("</ul>")
                 in_list = False
-            rendered.append(f"<h3>{html.escape(stripped[4:])}</h3>")
+            rendered.append(f"<h3>{_inline_markdown(stripped[4:])}</h3>")
             continue
         if stripped.startswith("## "):
             if in_list:
                 rendered.append("</ul>")
                 in_list = False
-            rendered.append(f"<h2>{html.escape(stripped[3:])}</h2>")
+            rendered.append(f"<h2>{_inline_markdown(stripped[3:])}</h2>")
             continue
         if stripped.startswith("- "):
             if not in_list:
                 rendered.append("<ul>")
                 in_list = True
-            rendered.append(f"<li>{html.escape(stripped[2:])}</li>")
+            rendered.append(f"<li>{_inline_markdown(stripped[2:])}</li>")
             continue
         if in_list:
             rendered.append("</ul>")
             in_list = False
-        rendered.append(f"<p>{html.escape(stripped)}</p>")
+        rendered.append(f"<p>{_inline_markdown(stripped)}</p>")
     if in_list:
         rendered.append("</ul>")
     return "\n".join(rendered)
@@ -188,6 +196,30 @@ def create_app(root: str) -> Flask:
             brief_markdown=brief_markdown,
             brief_html=_brief_to_html(brief_markdown),
         )
+
+    @app.get("/how-it-works")
+    def how_it_works():
+        sample_brief_md = (
+            "## Research Brief: perf-takehome\n\n"
+            "**Best:** cycles = **32,100** (codex-perf-2, exp-012)\n\n"
+            "**Experiments:** 47 (18 keep, 24 discard, 5 crash)\n\n"
+            "### Approaches tried\n"
+            "- **Loop optimization** — 12 experiments, best = 41,200 (exp-005)\n"
+            "- **Vectorization** — 8 experiments, best = 32,100 (exp-012)\n"
+            "- **Memory optimization** — 4 experiments, best = 43,800 (exp-019)\n\n"
+            "### Promising directions\n"
+            "- **Branch optimization** — 0 experiments (unexplored)\n"
+            "- **Compound:** combine vectorization + loop unrolling\n"
+            "- **Function inlining** — 1 experiment only, deserves more exploration"
+        )
+        return render_template(
+            "how-it-works.html",
+            sample_brief_html=_brief_to_html(sample_brief_md),
+        )
+
+    @app.get("/examples")
+    def examples():
+        return render_template("examples.html")
 
     @app.get("/e/<exp_id>")
     def experiment_detail(exp_id: str):

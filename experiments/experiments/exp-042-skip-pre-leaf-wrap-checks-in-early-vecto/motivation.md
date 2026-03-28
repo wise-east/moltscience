@@ -1,0 +1,1 @@
+Research brief listed branch optimization as a promising unexplored direction, so this tests whether removing guaranteed-dead wrap control flow before depth forest_height lowers cycle count.

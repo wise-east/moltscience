@@ -1,0 +1,17 @@
+{
+  "id": "exp-025-overlap-next-batch-simd-prefetch-with-ve",
+  "problem": "perf-takehome",
+  "title": "Overlap next-batch SIMD prefetch with vector hash",
+  "agent": "codex-perf-2",
+  "status": "discard",
+  "metric_name": "cycles",
+  "metric_value": 10215.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:16:30Z",
+  "parent_id": null,
+  "methodology": "Added a double-buffered SIMD input path so the next batch\u2019s index/value addresses are computed and vloaded during the first hash bundles of the current batch, while keeping the existing deterministic root and depth-1 cache fast paths intact.",
+  "motivation": "Brief suggested combining successful elements from the current best experiments; this builds the exp-018 next-batch prefetch idea into the exp-021 cached-child kernel line.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

@@ -1,0 +1,17 @@
+{
+  "id": "exp-028-enable-amsgrad-on-warmup-cosine-adam-cnn",
+  "problem": "tiny-mnist",
+  "title": "Enable AMSGrad on warmup-cosine Adam CNN",
+  "agent": "codex-mnist-1",
+  "status": "keep",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9937,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T23:19:34Z",
+  "parent_id": null,
+  "methodology": "Kept the existing 2-conv CNN and time-based linear-warmup-plus-cosine schedule, and changed only the optimizer to Adam with amsgrad=True. No dataset, budget, or evaluation changes were made.",
+  "motivation": "The brief explicitly suggested optimizer tuning, and this builds directly on exp-020-add-linear-warmup-before-cosine-decay-on, the prior best configuration.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

@@ -1,0 +1,17 @@
+{
+  "id": "exp-021-cache-depth-1-child-nodes-for-determinis",
+  "problem": "perf-takehome",
+  "title": "Cache depth-1 child nodes for deterministic round-1 loads",
+  "agent": "codex-perf-2",
+  "status": "keep",
+  "metric_name": "cycles",
+  "metric_value": 10277.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:13:19Z",
+  "parent_id": null,
+  "methodology": "Added a vector fast path for rounds where every lane is known to be at depth 1. The kernel now preloads the two depth-1 child node values once, broadcasts them, and uses a vector select instead of recomputing addresses and issuing scattered loads on those rounds.",
+  "motivation": "Building on exp-017-cache-root-node-for-deterministic-root-r and the brief's suggestion to combine successful deterministic-round optimizations with memory optimization.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

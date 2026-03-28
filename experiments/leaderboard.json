@@ -4,11 +4,67 @@
     "metric_direction": "higher_is_better",
     "entries": [
       {
-        "id": "exp-002-baseline-2-layer-mlp",
-        "metric_value": 0.9762,
+        "id": "exp-031-add-label-smoothing-plus-warmup-cosine-t",
+        "metric_value": 0.9939,
+        "agent": "codex-mnist-2",
+        "title": "Add label smoothing plus warmup-cosine to affine CNN",
+        "timestamp": "2026-03-28T23:21:38Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-028-enable-amsgrad-on-warmup-cosine-adam-cnn",
+        "metric_value": 0.9937,
+        "agent": "codex-mnist-1",
+        "title": "Enable AMSGrad on warmup-cosine Adam CNN",
+        "timestamp": "2026-03-28T23:19:34Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-020-add-linear-warmup-before-cosine-decay-on",
+        "metric_value": 0.9925,
+        "agent": "codex-mnist-1",
+        "title": "Add linear warmup before cosine decay on Adam CNN",
+        "timestamp": "2026-03-28T23:12:40Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-019-add-label-smoothing-to-cnn-training-loss",
+        "metric_value": 0.9921,
+        "agent": "codex-mnist-2",
+        "title": "Add label smoothing to CNN training loss",
+        "timestamp": "2026-03-28T23:12:32Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-011-time-based-cosine-decay-for-adam-on-the-",
+        "metric_value": 0.9915,
+        "agent": "codex-mnist-1",
+        "title": "Time-based cosine decay for Adam on the 2-conv CNN",
+        "timestamp": "2026-03-28T23:07:06Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-006-small-2-conv-cnn-replaces-baseline-mlp",
+        "metric_value": 0.9891,
+        "agent": "codex-mnist-1",
+        "title": "Small 2-conv CNN replaces baseline MLP",
+        "timestamp": "2026-03-28T22:54:44Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-007-random-affine-augmentation-on-training-s",
+        "metric_value": 0.989,
+        "agent": "codex-mnist-2",
+        "title": "Random affine augmentation on training set",
+        "timestamp": "2026-03-28T22:54:55Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-002-baseline-2-layer-mlp-with-adam",
+        "metric_value": 0.9794,
         "agent": "setup",
-        "title": "Baseline: 2-layer MLP",
-        "timestamp": "2026-03-28T19:34:49Z",
+        "title": "Baseline: 2-layer MLP with Adam",
+        "timestamp": "2026-03-28T22:44:10Z",
         "parent_id": null
       }
     ]
@@ -18,11 +74,91 @@
     "metric_direction": "lower_is_better",
     "entries": [
       {
+        "id": "exp-022-special-case-deterministic-root-rounds-i",
+        "metric_value": 9255.0,
+        "agent": "codex-perf-1",
+        "title": "Special-case deterministic root rounds in vector path",
+        "timestamp": "2026-03-28T23:14:27Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-018-pipeline-next-batch-prefetch-under-vecto",
+        "metric_value": 9392.0,
+        "agent": "codex-perf-1",
+        "title": "Pipeline next-batch prefetch under vector hash",
+        "timestamp": "2026-03-28T23:12:09Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-021-cache-depth-1-child-nodes-for-determinis",
+        "metric_value": 10277.0,
+        "agent": "codex-perf-2",
+        "title": "Cache depth-1 child nodes for deterministic round-1 loads",
+        "timestamp": "2026-03-28T23:13:19Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-017-cache-root-node-for-deterministic-root-r",
+        "metric_value": 10530.0,
+        "agent": "codex-perf-2",
+        "title": "Cache root node for deterministic root rounds",
+        "timestamp": "2026-03-28T23:10:27Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-013-fuse-leaf-threshold-mask-into-interchang",
+        "metric_value": 10913.0,
+        "agent": "codex-perf-2",
+        "title": "Fuse leaf-threshold mask into interchanged SIMD rounds",
+        "timestamp": "2026-03-28T23:08:40Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-010-interchange-batch-and-round-loops-to-kee",
+        "metric_value": 11424.0,
+        "agent": "codex-perf-2",
+        "title": "Interchange batch and round loops to keep state in scratch",
+        "timestamp": "2026-03-28T23:06:58Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-008-use-vector-leaf-threshold-predicate-for-",
+        "metric_value": 12353.0,
+        "agent": "codex-perf-1",
+        "title": "Use vector leaf-threshold predicate for wraparound",
+        "timestamp": "2026-03-28T23:05:35Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-005-remove-redundant-simd-store-address-reco",
+        "metric_value": 12864.0,
+        "agent": "codex-perf-1",
+        "title": "Remove redundant SIMD store address recomputation",
+        "timestamp": "2026-03-28T22:53:40Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-004-collapse-vector-child-index-parity-into-",
+        "metric_value": 13376.0,
+        "agent": "codex-perf-2",
+        "title": "Collapse vector child-index parity into multiply-add plus bit test",
+        "timestamp": "2026-03-28T22:53:18Z",
+        "parent_id": null
+      },
+      {
+        "id": "exp-003-vectorize-the-batch-loop-with-8-lane-sim",
+        "metric_value": 14400.0,
+        "agent": "codex-perf-1",
+        "title": "Vectorize the batch loop with 8-lane SIMD bundles",
+        "timestamp": "2026-03-28T22:49:26Z",
+        "parent_id": null
+      },
+      {
         "id": "exp-001-baseline-unoptimized",
-        "metric_value": 147732.0,
+        "metric_value": 147734.0,
         "agent": "setup",
         "title": "Baseline: unoptimized",
-        "timestamp": "2026-03-28T19:30:38Z",
+        "timestamp": "2026-03-28T22:42:28Z",
         "parent_id": null
       }
     ]

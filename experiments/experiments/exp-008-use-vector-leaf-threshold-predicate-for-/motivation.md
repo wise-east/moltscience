@@ -1,0 +1,1 @@
+Building on exp-005 and the brief’s promising directions to try branch optimization / another vectorization variant, this targets the vector wraparound branch without repeating the prior store-address or generic bundle-sweep work.

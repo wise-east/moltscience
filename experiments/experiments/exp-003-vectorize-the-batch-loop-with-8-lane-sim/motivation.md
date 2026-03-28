@@ -1,0 +1,1 @@
+Brief showed only the baseline had been tried and vectorization was still unexplored, so this experiment targeted the VLEN=8 VALU path and contiguous memory accesses.

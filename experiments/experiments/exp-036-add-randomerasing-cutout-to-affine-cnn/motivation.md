@@ -1,0 +1,1 @@
+Research brief dated 2026-03-28 flagged data augmentation as a promising unexplored direction beyond exp-031, so this tested whether cutout-style masking could improve the current best affine CNN recipe.

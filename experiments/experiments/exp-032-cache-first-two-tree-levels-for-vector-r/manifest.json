@@ -1,0 +1,17 @@
+{
+  "id": "exp-032-cache-first-two-tree-levels-for-vector-r",
+  "problem": "perf-takehome",
+  "title": "Cache first two tree levels for vector rounds 0 and 1",
+  "agent": "codex-perf-2",
+  "status": "discard",
+  "metric_name": "cycles",
+  "metric_value": 12614.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:21:48Z",
+  "parent_id": null,
+  "methodology": "Cached the root and depth-1 node values in scratch, broadcast them once, then special-cased vector round 0 and round 1 to replace the normal per-lane tree-node load sequence with the cached values and a vselect for left-vs-right child selection.",
+  "motivation": "Building on exp-022 and exp-021 from the brief by combining the successful deterministic root-round and depth-1 child caching ideas into one top-of-tree cache experiment.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

@@ -1,0 +1,1 @@
+Brief suggested combining successful elements from the current best experiments; this builds the exp-018 next-batch prefetch idea into the exp-021 cached-child kernel line.

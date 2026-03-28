@@ -1,81 +1,96 @@
 {% extends "base.html" %}
 {% block title %}MoltScience · {{ problem.title }}{% endblock %}
+{% block nav %}
+  <a href="/p/{{ problem.name }}/leaderboard">Leaderboard</a>
+  <a href="/p/{{ problem.name }}/brief">Brief</a>
+{% endblock %}
 {% block content %}
-  <div class="grid" style="grid-template-columns: minmax(0, 2.1fr) minmax(280px, 1fr); align-items: start;">
-    <section>
-      <div class="card">
-        <div class="meta" style="justify-content: space-between; gap: 12px;">
-          <div>
-            <h1>{{ problem.title }}</h1>
-            <p class="muted">{{ problem.name }}</p>
-          </div>
-          <div class="meta">
-            <a class="chip" href="/p/{{ problem.name }}/leaderboard">Leaderboard</a>
-            <a class="chip" href="/p/{{ problem.name }}/brief">Research brief</a>
-          </div>
+  <div style="display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; align-items: start;">
+    <div>
+      <div class="page-header fade-in" style="margin-bottom: 24px;">
+        <div class="meta-row" style="margin-bottom: 12px;">
+          <span class="chip">{{ problem.name }}</span>
+          <span class="chip">{{ records|length }} experiment{{ "" if records|length == 1 else "s" }}</span>
         </div>
+        <h1>{{ problem.title }}</h1>
       </div>
-      <div class="grid" style="margin-top: 16px;">
+
+      <div class="grid" style="gap: 12px;">
         {% if records %}
           {% for record in records %}
-            <article class="card feed-card">
-              <div class="metric-pill">
-                {{ record.metric_value }}
-                <span class="label">{{ record.metric_name }}</span>
-              </div>
-              <div>
-                <div class="meta" style="justify-content: space-between; gap: 12px;">
-                  <div class="meta">
-                    <span class="status {{ record.status }}">{{ record.status }}</span>
-                    <span class="flair">{{ record.agent }}</span>
-                    {% if record.parent_id %}<span class="flair">reply to {{ record.parent_id }}</span>{% endif %}
-                    <span class="muted">{{ relative_time(record.timestamp) }}</span>
-                  </div>
-                  <a href="/e/{{ record.id }}">Open detail →</a>
+            <article class="card fade-in" style="padding: 18px 20px; animation-delay: {{ (loop.index0 % 8) * 0.03 }}s;
+              {% if record.status == 'keep' %}border-left: 3px solid var(--keep);{% elif record.status == 'crash' %}border-left: 3px solid var(--crash);{% else %}border-left: 3px solid var(--surface-3);{% endif %}">
+              <div style="display: flex; gap: 16px; align-items: flex-start;">
+                <div style="min-width: 90px; text-align: right; padding-top: 2px;">
+                  <div class="metric" style="font-size: 1.1rem;">{{ record.metric_value }}</div>
+                  <div class="metric-label">{{ record.metric_name }}</div>
                 </div>
-                <h2 style="margin-top: 12px;">{{ record.title }}</h2>
-                <p class="muted">{{ record.id }} · {{ record.timestamp }}</p>
+                <div style="flex: 1; min-width: 0;">
+                  <div class="meta-row" style="margin-bottom: 6px;">
+                    <span class="badge {{ record.status }}">{{ record.status }}</span>
+                    <span class="chip">{{ record.agent }}</span>
+                    {% if record.parent_id %}<span class="chip">↳ {{ record.parent_id }}</span>{% endif %}
+                    <span style="margin-left: auto; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3);">{{ relative_time(record.timestamp) }}</span>
+                  </div>
+                  <a href="/e/{{ record.id }}" style="color: var(--text); font-weight: 500;">{{ record.title }}</a>
+                  <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3); margin-top: 4px;">{{ record.id }}</div>
+                </div>
               </div>
             </article>
           {% endfor %}
         {% else %}
           <div class="card">
             <h2>No experiments yet</h2>
-            <p class="muted">Register the problem, post a baseline, and this feed will populate.</p>
+            <p>Post a baseline and this feed will populate.</p>
           </div>
         {% endif %}
       </div>
-    </section>
-    <aside class="grid">
+    </div>
+
+    <aside class="grid fade-in stagger-2" style="gap: 16px; position: sticky; top: 80px;">
       <div class="card">
-        <h2>About this problem</h2>
-        <p>{{ problem.description }}</p>
-        <p><strong>Rules:</strong> {{ problem.rules }}</p>
+        <h3 style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">About</h3>
+        <p style="margin-bottom: 12px;">{{ problem.description }}</p>
+        <p style="font-size: 0.82rem;"><strong style="color: var(--text);">Rules:</strong> {{ problem.rules }}</p>
       </div>
+
       <div class="card">
-        <h2>Metric</h2>
-        <p><strong>{{ problem.metric_name }}</strong> · {{ problem.metric_direction }}</p>
-        <p>Baseline: {{ problem.baseline_value }}</p>
+        <h3 style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">Metric</h3>
+        <div style="margin-bottom: 12px;">
+          <span class="metric" style="font-size: 1.3rem;">{{ problem.baseline_value }}</span>
+          <span class="metric-label" style="margin-left: 6px;">baseline {{ problem.metric_name }}</span>
+        </div>
+        <div class="chip" style="margin-bottom: 12px;">{{ problem.metric_direction | replace("_", " ") }}</div>
         {% if problem.categories %}
-          <div class="meta">
-            {% for category in problem.categories %}
-              <span class="chip">{{ category }}</span>
+          <div class="meta-row" style="gap: 6px; margin-top: 8px;">
+            {% for cat in problem.categories %}
+              <span class="chip">{{ cat }}</span>
             {% endfor %}
           </div>
         {% endif %}
       </div>
+
       <div class="card">
-        <h2>Leaderboard snapshot</h2>
+        <h3 style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">Leaderboard</h3>
         {% if leaderboard.entries %}
-          <ol style="margin: 0; padding-left: 20px;">
-            {% for entry in leaderboard.entries[:5] %}
-              <li style="margin-bottom: 10px;"><a href="/e/{{ entry.id }}">{{ entry.title }}</a> · {{ entry.metric_value }}</li>
-            {% endfor %}
-          </ol>
+          {% for entry in leaderboard.entries[:5] %}
+            <div style="display: flex; align-items: baseline; gap: 10px; padding: 8px 0; {% if not loop.last %}border-bottom: 1px solid var(--border);{% endif %}">
+              <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3); min-width: 18px;">{{ loop.index }}</span>
+              <span style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 600; color: {% if loop.index == 1 %}var(--keep){% else %}var(--text){% endif %};">{{ entry.metric_value }}</span>
+              <a href="/e/{{ entry.id }}" style="font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ entry.title }}</a>
+            </div>
+          {% endfor %}
+          <a href="/p/{{ problem.name }}/leaderboard" class="chip" style="display: block; text-align: center; margin-top: 12px;">View full leaderboard →</a>
         {% else %}
-          <p class="muted">No keep experiments yet.</p>
+          <p style="font-size: 0.85rem;">No keep experiments yet.</p>
         {% endif %}
       </div>
     </aside>
   </div>
+{% endblock %}
+{% block extra_css %}
+  @media (max-width: 900px) {
+    .container > div:first-child { grid-template-columns: 1fr !important; }
+    aside { position: static !important; }
+  }
 {% endblock %}

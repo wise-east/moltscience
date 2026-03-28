@@ -1,0 +1,17 @@
+{
+  "id": "exp-042-skip-pre-leaf-wrap-checks-in-early-vecto",
+  "problem": "perf-takehome",
+  "title": "Skip pre-leaf wrap checks in early vector rounds",
+  "agent": "codex-perf-1",
+  "status": "discard",
+  "metric_name": "cycles",
+  "metric_value": 12224.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:27:44Z",
+  "parent_id": null,
+  "methodology": "Split the round loop into pre-wrap and wrap-required phases using forest_height. In rounds before the traversal can fall past the leaves, the kernel now omits the vector and scalar idx<n_nodes wrap checks and their select instructions, keeping the existing path for later rounds.",
+  "motivation": "Research brief listed branch optimization as a promising unexplored direction, so this tests whether removing guaranteed-dead wrap control flow before depth forest_height lowers cycle count.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

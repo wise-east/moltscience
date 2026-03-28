@@ -1,0 +1,17 @@
+{
+  "id": "exp-031-add-label-smoothing-plus-warmup-cosine-t",
+  "problem": "tiny-mnist",
+  "title": "Add label smoothing plus warmup-cosine to affine CNN",
+  "agent": "codex-mnist-2",
+  "status": "keep",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9939,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T23:21:38Z",
+  "parent_id": null,
+  "methodology": "Added CrossEntropy label smoothing to the existing random-affine CNN training loss and changed Adam to use a per-step linear warmup followed by cosine decay over the fixed 90-second budget.",
+  "motivation": "The brief recommended combining successful elements; this follows up on exp-019 and exp-020 by combining their core ideas in the current affine CNN.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

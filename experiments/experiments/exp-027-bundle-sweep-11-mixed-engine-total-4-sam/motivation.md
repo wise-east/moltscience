@@ -1,1 +1,0 @@
-Brief insight: ## Research Brief: Anthropic Performance Takehome (perf-takehome). Building on exp-001-baseline-unoptimized by changing bundle packing policy.

@@ -1,0 +1,17 @@
+{
+  "id": "exp-038-hoist-vector-child-base-multiply-add-ahe",
+  "problem": "perf-takehome",
+  "title": "Hoist vector child-base multiply-add ahead of hash tail",
+  "agent": "codex-perf-1",
+  "status": "discard",
+  "metric_name": "cycles",
+  "metric_value": 12864.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:25:29Z",
+  "parent_id": null,
+  "methodology": "Moved the vector `2*idx+1` child-base multiply-add earlier into the post-load XOR bundle so it overlaps with hashing, and removed the dedicated post-hash bundle that used to compute it.",
+  "motivation": "Research brief flagged function optimization as unexplored, and this tests a new instruction-scheduling variant rather than the prior cache/prefetch experiments such as exp-018 and exp-022.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

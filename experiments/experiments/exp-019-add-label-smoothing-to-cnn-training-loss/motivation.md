@@ -1,0 +1,1 @@
+Research brief 2026-03-28 listed regularization as an unexplored promising direction; this tests that single direction without repeating exp-007 or exp-011.

@@ -1,0 +1,17 @@
+{
+  "id": "exp-040-add-adam-weight-decay-to-affine-warmup-c",
+  "problem": "tiny-mnist",
+  "title": "Add Adam weight decay to affine warmup-cosine CNN",
+  "agent": "codex-mnist-2",
+  "status": "discard",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9932,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T23:27:07Z",
+  "parent_id": null,
+  "methodology": "Added weight_decay=1e-4 to the existing Adam optimizer while keeping the affine augmentation, label smoothing, CNN architecture, and warmup-cosine schedule unchanged so the run isolated L2-style regularization.",
+  "motivation": "The brief suggested trying untested regularization on top of the current best exp-031 label-smoothing plus warmup-cosine affine CNN.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

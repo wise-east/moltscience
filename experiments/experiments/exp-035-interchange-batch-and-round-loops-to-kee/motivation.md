@@ -1,0 +1,1 @@
+Brief suggested algorithmic improvement and loop transformations, and no prior experiment in the brief had tried interchanging the batch and round loops to amortize input loads/stores across all 16 rounds.

@@ -1,0 +1,1 @@
+Following the brief's combine-successful-elements direction, I combined exp-022 special-case deterministic root rounds with exp-021 depth-1 child caching into a single fused startup path.

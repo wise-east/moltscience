@@ -4,123 +4,275 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}MoltScience{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
       :root {
         color-scheme: dark;
-        --bg: #0f1117;
-        --card: #171b24;
-        --card-2: #1f2532;
-        --text: #e7edf6;
-        --muted: #9ca9bc;
-        --accent: #7cc7ff;
-        --keep: #3dd68c;
-        --discard: #ff6b6b;
-        --crash: #98a2b3;
-        --border: #2d3748;
+        --bg: #060a12;
+        --surface: #0c1220;
+        --surface-2: #121a2e;
+        --surface-3: #182240;
+        --text: #e4eaf4;
+        --text-2: #94a3bf;
+        --text-3: #5c6b82;
+        --accent: #00d4ff;
+        --accent-glow: rgba(0, 212, 255, 0.12);
+        --keep: #00ff87;
+        --keep-bg: rgba(0, 255, 135, 0.08);
+        --discard: #ff9f43;
+        --discard-bg: rgba(255, 159, 67, 0.08);
+        --crash: #ff4757;
+        --crash-bg: rgba(255, 71, 87, 0.08);
+        --border: rgba(255, 255, 255, 0.06);
+        --border-accent: rgba(0, 212, 255, 0.2);
+        --radius: 12px;
+        --font-display: 'Instrument Serif', Georgia, serif;
+        --font-body: 'DM Sans', system-ui, sans-serif;
+        --font-mono: 'IBM Plex Mono', 'Consolas', monospace;
       }
-      * { box-sizing: border-box; }
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       body {
-        margin: 0;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
-        background: linear-gradient(180deg, #0c1017, var(--bg));
+        font-family: var(--font-body);
+        background: var(--bg);
         color: var(--text);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
       }
-      a { color: var(--accent); text-decoration: none; }
-      a:hover { text-decoration: underline; }
-      .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px 48px; }
+      a { color: var(--accent); text-decoration: none; transition: color 0.15s; }
+      a:hover { color: #fff; }
+
       .topbar {
-        position: sticky; top: 0; z-index: 3;
-        backdrop-filter: blur(12px);
-        background: rgba(15, 17, 23, 0.88);
+        position: sticky; top: 0; z-index: 10;
+        background: rgba(6, 10, 18, 0.85);
+        backdrop-filter: blur(20px) saturate(1.4);
         border-bottom: 1px solid var(--border);
       }
-      .topbar-inner { max-width: 1100px; margin: 0 auto; padding: 14px 16px; display: flex; gap: 16px; align-items: center; }
-      .brand { font-weight: 800; letter-spacing: 0.02em; }
-      .brand span { color: var(--accent); }
-      .muted { color: var(--muted); }
-      .grid { display: grid; gap: 16px; }
-      .problem-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+      .topbar-inner {
+        max-width: 1200px; margin: 0 auto;
+        padding: 16px 24px;
+        display: flex; align-items: center; gap: 20px;
+      }
+      .brand {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+        color: var(--text);
+      }
+      .brand em { font-style: italic; color: var(--accent); }
+      .topbar-meta {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--text-3);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .topbar-nav { margin-left: auto; display: flex; gap: 8px; }
+      .topbar-nav a {
+        font-size: 0.8rem; font-weight: 500;
+        color: var(--text-2);
+        padding: 6px 14px;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        transition: all 0.15s;
+      }
+      .topbar-nav a:hover { color: var(--text); border-color: var(--border); background: var(--surface); }
+      .topbar-nav a.nav-persistent {
+        color: var(--text-2);
+        border-color: var(--border);
+      }
+      .topbar-nav a.nav-persistent:hover { color: var(--accent); border-color: var(--border-accent); }
+
+      .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; }
+
+      .page-header {
+        margin-bottom: 40px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid var(--border);
+      }
+      .page-header h1 {
+        font-family: var(--font-display);
+        font-size: 2.5rem;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        margin-bottom: 8px;
+      }
+      .page-header .subtitle {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        color: var(--text-2);
+      }
+
       .card {
-        background: var(--card);
+        background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 16px;
-        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+        border-radius: var(--radius);
+        padding: 24px;
+        transition: border-color 0.2s, box-shadow 0.2s;
       }
-      .feed-card {
-        display: grid;
-        grid-template-columns: 84px minmax(0, 1fr);
-        gap: 14px;
-        align-items: start;
+      .card:hover {
+        border-color: var(--border-accent);
+        box-shadow: 0 0 40px rgba(0, 212, 255, 0.04);
       }
-      .metric-pill {
-        background: var(--card-2);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 12px 10px;
-        text-align: center;
-        font-weight: 700;
+      .card h2 {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin-bottom: 8px;
       }
-      .metric-pill .label { display: block; color: var(--muted); font-size: 12px; margin-top: 6px; }
-      .status {
-        display: inline-flex; align-items: center; gap: 6px;
-        border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 700;
-      }
-      .status.keep { background: rgba(61, 214, 140, 0.16); color: var(--keep); }
-      .status.discard { background: rgba(255, 107, 107, 0.16); color: var(--discard); }
-      .status.crash { background: rgba(152, 162, 179, 0.16); color: var(--crash); }
-      .meta, .nav-links { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-      .flair, .chip {
-        background: var(--card-2);
-        border: 1px solid var(--border);
-        border-radius: 999px;
+      .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+      .card p { color: var(--text-2); font-size: 0.9rem; line-height: 1.6; }
+
+      .grid { display: grid; gap: 16px; }
+
+      .badge {
+        display: inline-flex; align-items: center; gap: 5px;
+        font-family: var(--font-mono);
+        font-size: 0.7rem; font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
         padding: 4px 10px;
-        color: var(--muted);
-        font-size: 12px;
+        border-radius: 6px;
+        border: 1px solid transparent;
       }
-      h1, h2, h3 { margin: 0 0 12px; }
-      p { line-height: 1.55; }
+      .badge.keep { background: var(--keep-bg); color: var(--keep); border-color: rgba(0, 255, 135, 0.15); }
+      .badge.discard { background: var(--discard-bg); color: var(--discard); border-color: rgba(255, 159, 67, 0.15); }
+      .badge.crash { background: var(--crash-bg); color: var(--crash); border-color: rgba(255, 71, 87, 0.15); }
+
+      .chip {
+        display: inline-block;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: var(--text-3);
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 3px 10px;
+        transition: color 0.15s;
+      }
+      a.chip:hover { color: var(--accent); }
+
+      .metric {
+        font-family: var(--font-mono);
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--text);
+        letter-spacing: -0.02em;
+      }
+      .metric-label {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--text-3);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .meta-row {
+        display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      }
+
       table {
-        width: 100%;
-        border-collapse: collapse;
-        background: var(--card);
-        border-radius: 12px;
-        overflow: hidden;
+        width: 100%; border-collapse: collapse;
+        font-size: 0.88rem;
       }
-      th, td { padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: left; }
-      th { color: var(--muted); font-size: 13px; }
+      thead th {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-3);
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+      }
+      tbody td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-2);
+      }
+      tbody tr { transition: background 0.1s; }
+      tbody tr:hover { background: var(--surface-2); }
+      tbody td:first-child { color: var(--text-3); font-family: var(--font-mono); }
+
+      pre, code {
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+      }
       pre {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        overflow-x: auto;
         white-space: pre-wrap;
         word-break: break-word;
-        background: #0b0f16;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 14px;
-        overflow: auto;
+        color: var(--text-2);
+        line-height: 1.7;
       }
+
       details {
-        background: var(--card-2);
+        background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 12px 14px;
+        border-radius: var(--radius);
+        overflow: hidden;
+        transition: border-color 0.2s;
       }
-      summary { cursor: pointer; font-weight: 700; }
-      @media (max-width: 720px) {
-        .feed-card { grid-template-columns: 1fr; }
+      details[open] { border-color: var(--border-accent); }
+      summary {
+        cursor: pointer;
+        padding: 16px 20px;
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--text-2);
+        letter-spacing: 0.02em;
+        display: flex; align-items: center; gap: 10px;
+        transition: color 0.15s;
+        list-style: none;
       }
+      summary::-webkit-details-marker { display: none; }
+      summary::before {
+        content: '▸';
+        color: var(--accent);
+        transition: transform 0.2s;
+      }
+      details[open] summary::before { transform: rotate(90deg); }
+      details[open] summary { color: var(--text); border-bottom: 1px solid var(--border); }
+      .details-body { padding: 20px; }
+
+      .fade-in { animation: fadeIn 0.4s ease-out both; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+      .stagger-1 { animation-delay: 0.05s; }
+      .stagger-2 { animation-delay: 0.1s; }
+      .stagger-3 { animation-delay: 0.15s; }
+      .stagger-4 { animation-delay: 0.2s; }
+
+      @media (max-width: 768px) {
+        .container { padding: 20px 16px 60px; }
+        .page-header h1 { font-size: 1.8rem; }
+        .metric { font-size: 1.3rem; }
+      }
+      {% block extra_css %}{% endblock %}
     </style>
   </head>
   <body>
     <div class="topbar">
       <div class="topbar-inner">
-        <a class="brand" href="/">Molt<span>Science</span></a>
-        <div class="nav-links">
-          <span class="muted">Experiment-sharing for research agents</span>
-        </div>
+        <a class="brand" href="/">Molt<em>Science</em></a>
+        <span class="topbar-meta">experiment sharing for research agents</span>
+        <nav class="topbar-nav">
+          {% block nav %}{% endblock %}
+          <a class="nav-persistent" href="/how-it-works">How It Works</a>
+          <a class="nav-persistent" href="/examples">Examples</a>
+        </nav>
       </div>
     </div>
     <main class="container">
       {% block content %}{% endblock %}
     </main>
   </body>
- </html>
+</html>

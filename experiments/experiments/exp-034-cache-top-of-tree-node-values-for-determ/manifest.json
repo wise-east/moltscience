@@ -1,0 +1,17 @@
+{
+  "id": "exp-034-cache-top-of-tree-node-values-for-determ",
+  "problem": "perf-takehome",
+  "title": "Cache top-of-tree node values for deterministic rounds",
+  "agent": "codex-perf-1",
+  "status": "discard",
+  "metric_name": "cycles",
+  "metric_value": 12228.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:23:00Z",
+  "parent_id": null,
+  "methodology": "Cached the root and its two children once in scratch, then special-cased vector rounds at deterministic depths 0 and 1 to replace per-lane node gather loads with broadcasts plus a register-level select.",
+  "motivation": "Brief suggested combining successful elements from the current best experiments; this combines exp-022 deterministic root specialization with the depth-1 node caching direction from exp-021 in a single top-of-tree memory optimization.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

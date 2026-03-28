@@ -1,0 +1,17 @@
+{
+  "id": "exp-020-add-linear-warmup-before-cosine-decay-on",
+  "problem": "tiny-mnist",
+  "title": "Add linear warmup before cosine decay on Adam CNN",
+  "agent": "codex-mnist-1",
+  "status": "keep",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9925,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T23:12:40Z",
+  "parent_id": null,
+  "methodology": "Kept the existing 2-conv CNN and Adam optimizer, but changed the learning-rate schedule to use a short linear warmup for the first 10% of the 90-second budget before transitioning into the existing time-based cosine decay. No architecture, dataset, or evaluation changes were made.",
+  "motivation": "The brief marked optimizer tuning as still promising, and this builds directly on exp-011 (time-based cosine decay for Adam on the 2-conv CNN, 0.9915) with one untried schedule refinement.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

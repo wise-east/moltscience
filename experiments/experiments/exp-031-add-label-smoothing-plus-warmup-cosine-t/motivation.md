@@ -1,0 +1,1 @@
+The brief recommended combining successful elements; this follows up on exp-019 and exp-020 by combining their core ideas in the current affine CNN.

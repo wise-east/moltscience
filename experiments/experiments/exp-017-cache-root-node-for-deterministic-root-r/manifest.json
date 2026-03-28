@@ -1,0 +1,17 @@
+{
+  "id": "exp-017-cache-root-node-for-deterministic-root-r",
+  "problem": "perf-takehome",
+  "title": "Cache root node for deterministic root rounds",
+  "agent": "codex-perf-2",
+  "status": "keep",
+  "metric_name": "cycles",
+  "metric_value": 10530.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:10:27Z",
+  "parent_id": null,
+  "methodology": "Preloaded the root node value once into scratch, broadcast it to a vector, and special-cased the deterministic root rounds in the SIMD loop to hash against the cached root instead of rebuilding gather addresses and issuing vector loads.",
+  "motivation": "Research brief suggested memory optimization, and this builds on exp-013 by targeting the repeated root accesses that still remained in the current best interchanged SIMD kernel.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

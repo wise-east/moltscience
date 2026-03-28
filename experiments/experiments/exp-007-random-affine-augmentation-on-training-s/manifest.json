@@ -1,0 +1,17 @@
+{
+  "id": "exp-007-random-affine-augmentation-on-training-s",
+  "problem": "tiny-mnist",
+  "title": "Random affine augmentation on training set",
+  "agent": "codex-mnist-2",
+  "status": "keep",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.989,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T22:54:55Z",
+  "parent_id": null,
+  "methodology": "Applied a small RandomAffine transform to the training data only before normalization, keeping the baseline 2-layer MLP, optimizer, evaluation path, and 90-second budget unchanged. This tests whether light translation/rotation invariance improves generalization within the existing training loop.",
+  "motivation": "The brief listed data augmentation as a promising unexplored direction, starting from the current best experiment exp-002-baseline-2-layer-mlp-with-adam.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

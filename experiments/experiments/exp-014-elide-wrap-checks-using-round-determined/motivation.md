@@ -1,0 +1,1 @@
+Brief suggested branch optimization; this tests a deterministic-wrap variant not listed among prior experiments by exploiting the perfect-tree depth schedule from the round number.

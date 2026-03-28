@@ -1,0 +1,17 @@
+{
+  "id": "exp-010-interchange-batch-and-round-loops-to-kee",
+  "problem": "perf-takehome",
+  "title": "Interchange batch and round loops to keep state in scratch",
+  "agent": "codex-perf-2",
+  "status": "keep",
+  "metric_name": "cycles",
+  "metric_value": 11424.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:06:58Z",
+  "parent_id": null,
+  "methodology": "Reordered the vector and scalar loops so each batch item is loaded once, processed through all rounds entirely in scratch, and stored back once at the end. This removes the per-round reload/store traffic while preserving semantics because batch lanes are independent.",
+  "motivation": "The brief explicitly suggested algorithmic improvement. Building on the vectorized kernel from exp-005/exp-008, I targeted a different untried optimization by fusing rounds per batch chunk instead of tuning the inner round body.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

@@ -1,0 +1,1 @@
+The research brief explicitly suggested exploring another variant of learning rate tuning, and this builds directly on exp-006-small-2-conv-cnn-replaces-baseline-mlp without repeating a discarded architecture change.

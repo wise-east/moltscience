@@ -1,0 +1,1 @@
+Research brief flagged memory optimization as unexplored, and this builds on exp-005 and exp-008 by reducing idle load/ALU cycles instead of repeating loop-interchange or predicate-fusion experiments.

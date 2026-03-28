@@ -1,0 +1,1 @@
+The research brief dated 2026-03-28 lists optimizer tuning as a promising unexplored direction, and this builds directly on exp-028, the current best warmup-cosine AMSGrad Adam CNN.

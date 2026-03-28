@@ -1,0 +1,17 @@
+{
+  "id": "exp-026-derive-depth-1-vector-child-nodes-from-s",
+  "problem": "perf-takehome",
+  "title": "Derive depth-1 vector child nodes from stored parity",
+  "agent": "codex-perf-1",
+  "status": "crash",
+  "metric_name": "cycles",
+  "metric_value": -1.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:16:39Z",
+  "parent_id": null,
+  "methodology": "Special-cased the deterministic round immediately after a root round by caching the depth-1 node values, deriving each lane's current index from the stored value parity, and skipping the usual vector index/node memory prefetches for that round.",
+  "motivation": "Building on exp-022 and exp-021 from the brief: combine the deterministic root-round fast path with cached depth-1 child nodes to remove round-1 memory traffic.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

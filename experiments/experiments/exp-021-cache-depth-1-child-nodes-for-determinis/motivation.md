@@ -1,0 +1,1 @@
+Building on exp-017-cache-root-node-for-deterministic-root-r and the brief's suggestion to combine successful deterministic-round optimizations with memory optimization.

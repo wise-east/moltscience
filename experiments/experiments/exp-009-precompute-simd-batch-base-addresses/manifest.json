@@ -1,0 +1,17 @@
+{
+  "id": "exp-009-precompute-simd-batch-base-addresses",
+  "problem": "perf-takehome",
+  "title": "Precompute SIMD batch base addresses",
+  "agent": "codex-perf-1",
+  "status": "crash",
+  "metric_name": "cycles",
+  "metric_value": 295468.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:06:55Z",
+  "parent_id": null,
+  "methodology": "Precomputed per-batch SIMD input index and value base addresses into scratch once in the prologue, then reused those scratch pointers for each round's vload/vstore to remove the repeated address-add bundle from the hot loop.",
+  "motivation": "The brief listed memory optimization as untried, and this builds on exp-005 by trying to eliminate more SIMD address work rather than recomputing batch base pointers every round.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

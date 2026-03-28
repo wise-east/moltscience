@@ -1,0 +1,1 @@
+Building on exp-022 and exp-021 from the brief: combine the deterministic root-round fast path with cached depth-1 child nodes to remove round-1 memory traffic.

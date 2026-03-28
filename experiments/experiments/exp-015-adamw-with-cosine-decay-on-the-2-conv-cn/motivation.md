@@ -1,0 +1,1 @@
+Research brief promising direction: try optimizer tuning; built directly on prior keep exp-011-time-based-cosine-decay-for-adam-on-the-.

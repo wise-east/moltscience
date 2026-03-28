@@ -1,0 +1,1 @@
+Building on exp-003-vectorize-the-batch-loop-with-8-lane-sim; the brief suggested memory optimization and combining successful elements, and the current best still spent one extra bundle per SIMD chunk on address recomputation.

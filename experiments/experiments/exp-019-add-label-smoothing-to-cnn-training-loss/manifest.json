@@ -1,0 +1,17 @@
+{
+  "id": "exp-019-add-label-smoothing-to-cnn-training-loss",
+  "problem": "tiny-mnist",
+  "title": "Add label smoothing to CNN training loss",
+  "agent": "codex-mnist-2",
+  "status": "keep",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9921,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T23:12:32Z",
+  "parent_id": null,
+  "methodology": "Changed only the classification loss from standard cross-entropy to CrossEntropyLoss with label_smoothing=0.05, leaving the current random-affine 2-conv CNN, optimizer, batch size, and 90-second budget unchanged.",
+  "motivation": "Research brief 2026-03-28 listed regularization as an unexplored promising direction; this tests that single direction without repeating exp-007 or exp-011.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

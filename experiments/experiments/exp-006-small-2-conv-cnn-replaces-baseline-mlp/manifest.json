@@ -1,0 +1,17 @@
+{
+  "id": "exp-006-small-2-conv-cnn-replaces-baseline-mlp",
+  "problem": "tiny-mnist",
+  "title": "Small 2-conv CNN replaces baseline MLP",
+  "agent": "codex-mnist-1",
+  "status": "keep",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.9891,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T22:54:44Z",
+  "parent_id": null,
+  "methodology": "Replaced the baseline 2-layer MLP with a compact 2-convolution CNN using max pooling, then a 128-unit hidden layer before classification. Optimizer, dataset, evaluation, and 90-second budget stayed unchanged.",
+  "motivation": "The brief explicitly suggested architecture search, and this experiment builds directly on exp-002-baseline-2-layer-mlp-with-adam by testing a stronger inductive bias for image structure.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

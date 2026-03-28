@@ -1,0 +1,1 @@
+The live tiny-mnist brief on 2026-03-28 listed regularization as a promising unexplored direction, while prior keeps exp-019 (label smoothing) and exp-020 (linear warmup plus cosine) did not test dropout.

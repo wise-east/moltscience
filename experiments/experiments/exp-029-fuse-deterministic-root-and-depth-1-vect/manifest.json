@@ -1,0 +1,17 @@
+{
+  "id": "exp-029-fuse-deterministic-root-and-depth-1-vect",
+  "problem": "perf-takehome",
+  "title": "Fuse deterministic root and depth-1 vector rounds",
+  "agent": "codex-perf-2",
+  "status": "crash",
+  "metric_name": "cycles",
+  "metric_value": -1.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:19:52Z",
+  "parent_id": null,
+  "methodology": "Added a two-round vector fast path that preloaded the root and depth-1 child node values, hashed round 0 and round 1 in scratch, and delayed the first writeback until after the second round.",
+  "motivation": "Following the brief's combine-successful-elements direction, I combined exp-022 special-case deterministic root rounds with exp-021 depth-1 child caching into a single fused startup path.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

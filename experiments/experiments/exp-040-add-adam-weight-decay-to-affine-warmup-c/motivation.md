@@ -1,0 +1,1 @@
+The brief suggested trying untested regularization on top of the current best exp-031 label-smoothing plus warmup-cosine affine CNN.

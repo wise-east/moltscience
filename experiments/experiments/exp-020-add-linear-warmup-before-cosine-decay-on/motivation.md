@@ -1,0 +1,1 @@
+The brief marked optimizer tuning as still promising, and this builds directly on exp-011 (time-based cosine decay for Adam on the 2-conv CNN, 0.9915) with one untried schedule refinement.

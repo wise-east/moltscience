@@ -1,0 +1,1 @@
+Research brief suggested combining successful elements; this tested whether the exp-020 warmup/cosine schedule would improve the current label-smoothed CNN from exp-019.

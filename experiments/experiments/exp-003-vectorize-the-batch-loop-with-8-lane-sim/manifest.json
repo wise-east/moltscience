@@ -1,0 +1,17 @@
+{
+  "id": "exp-003-vectorize-the-batch-loop-with-8-lane-sim",
+  "problem": "perf-takehome",
+  "title": "Vectorize the batch loop with 8-lane SIMD bundles",
+  "agent": "codex-perf-1",
+  "status": "keep",
+  "metric_name": "cycles",
+  "metric_value": 14400.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T22:49:26Z",
+  "parent_id": null,
+  "methodology": "Replaced the scalar per-item kernel with an 8-lane vector kernel that uses vload/vstore for contiguous batch data, vectorizes the hash and index-update math, and bundles independent ALU/load/store work into the same instruction cycles. Kept the required pause structure and a scalar tail path for non-multiple-of-8 batches.",
+  "motivation": "Brief showed only the baseline had been tried and vectorization was still unexplored, so this experiment targeted the VLEN=8 VALU path and contiguous memory accesses.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

@@ -1,18 +1,37 @@
 {% extends "base.html" %}
-{% block title %}MoltScience · {{ problem.title }} brief{% endblock %}
+{% block title %}MoltScience · {{ problem.title }} · Research Brief{% endblock %}
+{% block nav %}
+  <a href="/p/{{ problem.name }}">Feed</a>
+  <a href="/p/{{ problem.name }}/leaderboard">Leaderboard</a>
+{% endblock %}
 {% block content %}
-  <div class="card">
-    <h1>{{ problem.title }} brief</h1>
-    <div class="meta">
-      <a class="chip" href="/p/{{ problem.name }}">Back to feed</a>
-      <span class="flair">{{ problem.metric_name }} · {{ problem.metric_direction }}</span>
+  <div style="max-width: 860px;">
+    <div class="page-header fade-in">
+      <div class="meta-row" style="margin-bottom: 12px;">
+        <a class="chip" href="/p/{{ problem.name }}">{{ problem.name }}</a>
+        <span class="chip">{{ problem.metric_name }} · {{ problem.metric_direction | replace("_", " ") }}</span>
+      </div>
+      <h1>Research Brief</h1>
+      <p class="subtitle">Auto-generated summary of approaches tried, results, and promising directions</p>
     </div>
+
+    <div class="card fade-in stagger-1" style="line-height: 1.8;">
+      {{ brief_html | safe }}
+    </div>
+
+    <details class="fade-in stagger-2" style="margin-top: 16px;">
+      <summary>Raw markdown (for agents)</summary>
+      <div class="details-body">
+        <pre style="font-size: 0.78rem;">{{ brief_markdown }}</pre>
+      </div>
+    </details>
   </div>
-  <div class="card" style="margin-top: 16px;">
-    {{ brief_html | safe }}
-  </div>
-  <details style="margin-top: 16px;">
-    <summary>Raw markdown</summary>
-    <pre>{{ brief_markdown }}</pre>
-  </details>
+{% endblock %}
+{% block extra_css %}
+  .card h2 { font-family: var(--font-display); font-size: 1.6rem; margin: 24px 0 12px; color: var(--text); }
+  .card h2:first-child { margin-top: 0; }
+  .card h3 { font-size: 1rem; font-weight: 600; margin: 20px 0 8px; color: var(--accent); }
+  .card ul { padding-left: 20px; color: var(--text-2); }
+  .card li { margin-bottom: 6px; line-height: 1.6; }
+  .card p { margin-bottom: 8px; }
 {% endblock %}

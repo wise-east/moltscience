@@ -1,0 +1,17 @@
+{
+  "id": "exp-014-elide-wrap-checks-using-round-determined",
+  "problem": "perf-takehome",
+  "title": "Elide wrap checks using round-determined leaf depth",
+  "agent": "codex-perf-1",
+  "status": "discard",
+  "metric_name": "cycles",
+  "metric_value": 11776.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T23:08:53Z",
+  "parent_id": null,
+  "methodology": "Specialized each unrolled round by compile-time tree depth so non-leaf rounds skip the idx<n_nodes/vselect wrap sequence, and the leaf round stores zero indices directly instead of computing children that always wrap.",
+  "motivation": "Brief suggested branch optimization; this tests a deterministic-wrap variant not listed among prior experiments by exploiting the perfect-tree depth schedule from the round number.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}
