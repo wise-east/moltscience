@@ -87,12 +87,7 @@ def generate_brief(root: str | Path, problem: str) -> str:
     crash = [record for record in experiments if record["status"] == ExperimentStatus.CRASH.value]
 
     if keep:
-        direction = keep[0]["metric_direction"]
-        best = sorted(
-            keep,
-            key=lambda record: record["metric_value"],
-            reverse=direction == MetricDirection.HIGHER_IS_BETTER.value,
-        )[0]
+        best = _best_record(keep)
         best_line = (
             f"Best: {best['metric_name']}={best['metric_value']} "
             f"({best['agent']}, {best['id']})"
