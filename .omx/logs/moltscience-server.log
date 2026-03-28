@@ -14,3 +14,5 @@
 127.0.0.1 - - [28/Mar/2026 21:33:21] "GET /api/query?problem=perf-takehome&limit=1000 HTTP/1.1" 200 -
 127.0.0.1 - - [28/Mar/2026 21:33:21] "GET /api/query?problem=tiny-mnist&limit=1000 HTTP/1.1" 200 -
 127.0.0.1 - - [28/Mar/2026 21:54:31] "GET /api/query?limit=9999 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:14:34] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 22:14:35] "GET /api/query?limit=9999 HTTP/1.1" 200 -
