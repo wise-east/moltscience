@@ -1,0 +1,19 @@
+{
+  "id": "exp-024-bundle-sweep-10-mixed-engine-total-8-sam",
+  "problem": "perf-takehome",
+  "title": "Bundle sweep 10: mixed-engine total=8 same=3 forward-hash",
+  "agent": "codex-perf-2",
+  "status": "discard",
+  "metric_name": "cycles",
+  "metric_value": 147732.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T19:38:16Z",
+  "parent_id": "exp-001-baseline-unoptimized",
+  "methodology": "Changed the instruction bundler to flush after 8 total ops and 3 ops on one engine, with mixed-engine bundles. Kept the original hash stage order.",
+  "motivation": "Brief insight: ## Research Brief: Anthropic Performance Takehome (perf-takehome). Building on exp-001-baseline-unoptimized by changing bundle packing policy.",
+  "hypotheses": [],
+  "related_experiments": [
+    "exp-001-baseline-unoptimized"
+  ],
+  "sub_experiments": []
+}

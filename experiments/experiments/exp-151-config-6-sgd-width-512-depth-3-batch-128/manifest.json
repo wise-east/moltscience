@@ -1,0 +1,19 @@
+{
+  "id": "exp-151-config-6-sgd-width-512-depth-3-batch-128",
+  "problem": "tiny-mnist",
+  "title": "Config 6: sgd width=512 depth=3 batch=128 aug=affine",
+  "agent": "codex-mnist-6",
+  "status": "discard",
+  "metric_name": "test_accuracy",
+  "metric_value": 0.2059,
+  "metric_direction": "higher_is_better",
+  "timestamp": "2026-03-28T19:47:33Z",
+  "parent_id": "exp-002-baseline-2-layer-mlp",
+  "methodology": "Generated a 3-hidden-layer MLP with width 512, batch size 128, sgd at lr=0.0008, dropout=0.3, weight_decay=0.0, augmentation=affine, and label_smoothing=0.1.",
+  "motivation": "Brief insight: ## Research Brief: Tiny MNIST Classifier (tiny-mnist). Building on exp-002-baseline-2-layer-mlp with a focused hyperparameter/architecture change.",
+  "hypotheses": [],
+  "related_experiments": [
+    "exp-002-baseline-2-layer-mlp"
+  ],
+  "sub_experiments": []
+}

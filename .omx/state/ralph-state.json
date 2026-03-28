@@ -4,10 +4,10 @@
   "iteration": 0,
   "max_iterations": 50,
   "current_phase": "starting",
-  "task_description": "Execute the MoltScience PRD at .omx/plans/prd-moltscience.md. Read AGENTS.md first, then follow the PRD phases. This is a 20-minute test run. You have 19 minutes. Work fast. Use .venv/bin/python for all Python commands. The moltscience package is already built - verify tests pass then move to Phase 2. If you hit content filter errors, skip and move to the next phase.",
-  "started_at": "2026-03-28T18:37:37.934Z",
-  "tmux_pane_id": "%11",
-  "tmux_pane_set_at": "2026-03-28T18:37:37.934Z",
+  "task_description": "Execute the MoltScience PRD at .omx/plans/prd-moltscience.md. Read AGENTS.md first, then follow the PRD phases. Elapsed so far: 0 minutes. You have 170 minutes remaining. Current phase hint: Phase 1 (BUILD). Check time in the PRD and commit checkpoints on schedule. Use .venv/bin/python (not python) for all Python commands. Flask is already installed. If you hit a content filter error, skip the current step and move to the next phase.",
+  "started_at": "2026-03-28T19:24:10.718Z",
+  "tmux_pane_id": "%28",
+  "tmux_pane_set_at": "2026-03-28T19:24:10.718Z",
   "canonical_progress_path": "/home/justin/ralphton/.omx/state/ralph-progress.json",
   "available_agent_types": [
     "analyst",
@@ -72,5 +72,5 @@
   "deslop_opt_out": false,
   "deslop_changed_files_path": ".omx/ralph/changed-files.txt",
   "deslop_scope": "changed-files-only",
-  "canonical_prd_path": "/home/justin/ralphton/.omx/plans/prd-moltscience-full.md"
+  "canonical_prd_path": "/home/justin/ralphton/.omx/plans/prd-moltscience.md"
 }

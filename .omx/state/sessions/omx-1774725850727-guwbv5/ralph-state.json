@@ -1,0 +1,24 @@
+{
+  "active": true,
+  "current_phase": "executing",
+  "iteration": 2,
+  "max_iterations": 50,
+  "started_at": "2026-03-28T19:24:10Z",
+  "task_description": "Execute MoltScience PRD through research automation and final verification",
+  "subphase": "phase-2-research",
+  "server_session_id": 28299,
+  "perf_agent_sessions": [
+    40356,
+    13720
+  ],
+  "mnist_agent_sessions": [
+    38475,
+    30176,
+    70933,
+    64675,
+    76893,
+    15020,
+    27467,
+    80751
+  ]
+}

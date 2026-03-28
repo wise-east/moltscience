@@ -1,0 +1,19 @@
+{
+  "id": "exp-039-bundle-sweep-17-single-engine-total-4-sa",
+  "problem": "perf-takehome",
+  "title": "Bundle sweep 17: single-engine total=4 same=4 forward-hash",
+  "agent": "codex-perf-1",
+  "status": "discard",
+  "metric_name": "cycles",
+  "metric_value": 147732.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T19:38:45Z",
+  "parent_id": "exp-001-baseline-unoptimized",
+  "methodology": "Changed the instruction bundler to flush after 4 total ops and 4 ops on one engine, with single-engine bundles. Kept the original hash stage order.",
+  "motivation": "Brief insight: ## Research Brief: Anthropic Performance Takehome (perf-takehome). Building on exp-001-baseline-unoptimized by changing bundle packing policy.",
+  "hypotheses": [],
+  "related_experiments": [
+    "exp-001-baseline-unoptimized"
+  ],
+  "sub_experiments": []
+}
