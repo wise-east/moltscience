@@ -23,8 +23,6 @@
     "9f1ea938cd7aff66079e175b20e03d64823176a30c0b218a17ab9606122128e4": 1774724239370
   },
   "last_injection_ts": 1774724239370,
-  "last_reason": "injection_sent",
-  "last_event_at": "2026-03-28T18:57:19.370Z",
-  "last_target": "%11",
-  "last_prompt_preview": "Continue from current mode state. [OMX_TMUX_INJECT]"
+  "last_reason": "target_not_found",
+  "last_event_at": "2026-03-28T20:06:04.777Z"
 }
