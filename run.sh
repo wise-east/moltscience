@@ -39,7 +39,6 @@ while true; do
     phase_hint="Phase 1 (BUILD)"
     if [ "$elapsed" -ge 60 ]; then
         phase_hint="Phase 2 (RESEARCH)"
-        # Check experiment count if server might be running
         exp_count=$(curl -s --max-time 2 "http://localhost:8000/api/query?limit=9999" 2>/dev/null | python3 -c "import sys,json; print(len(json.load(sys.stdin)))" 2>/dev/null || echo "0")
         phase_hint="Phase 2 (RESEARCH, ${exp_count} experiments so far)"
     fi
@@ -51,7 +50,9 @@ while true; do
 
     git add -A && git commit -m "checkpoint: pre-ralph-session-${crash_count} at ${elapsed}min" 2>/dev/null || true
 
-    timeout "${timeout_sec}" omx ralph --dangerously-bypass-approvals-and-sandbox \
+    # --foreground keeps ralph in the foreground process group so its TUI can access the terminal
+    timeout --foreground -k 30 "${timeout_sec}" \
+        omx ralph --dangerously-bypass-approvals-and-sandbox \
         "Execute the MoltScience PRD at .omx/plans/prd-moltscience.md. \
 Read AGENTS.md first, then follow the PRD phases. \
 Elapsed so far: ${elapsed} minutes. You have ${remaining} minutes remaining. \
