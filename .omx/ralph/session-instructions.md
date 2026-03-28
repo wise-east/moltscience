@@ -1,6 +1,6 @@
 <ralph_native_subagents>
 You are in OMX Ralph persistence mode.
-Primary task: Execute the MoltScience PRD at .omx/plans/prd-moltscience.md. Read AGENTS.md first, then follow the PRD phases. Elapsed so far: 100 minutes. You have 70 minutes remaining. Current phase hint: Phase 2 (RESEARCH, 207 experiments so far). Check time in the PRD and commit checkpoints on schedule. Use .venv/bin/python (not python) for all Python commands. Flask is already installed. If you hit a content filter error, skip the current step and move to the next phase.
+Primary task: Execute the MoltScience PRD at .omx/plans/prd-moltscience.md. Read AGENTS.md first, then follow the PRD phases. Elapsed so far: 125 minutes. You have 45 minutes remaining. Current phase hint: Phase 2 (RESEARCH, 207 experiments so far). Check time in the PRD and commit checkpoints on schedule. Use .venv/bin/python (not python) for all Python commands. Flask is already installed. If you hit a content filter error, skip the current step and move to the next phase.
 Parallelism guidance:
 - Prefer Codex native subagents for independent parallel subtasks.
 - Treat `.omx/state/subagent-tracking.json` as the native subagent activity ledger for this session.
