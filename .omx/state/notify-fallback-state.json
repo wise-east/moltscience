@@ -12,9 +12,9 @@
   "dispatch_drain": {
     "enabled": true,
     "max_per_tick": 5,
-    "run_count": 5321,
+    "run_count": 5333,
     "leader_only": true,
-    "last_tick_at": "2026-03-28T20:14:14.301Z",
+    "last_tick_at": "2026-03-28T20:14:17.594Z",
     "last_result": {
       "processed": 0,
       "skipped": 0,
@@ -26,17 +26,17 @@
     "enabled": true,
     "leader_only": true,
     "stale_threshold_ms": 180000,
-    "precomputed_leader_stale": true,
-    "last_tick_at": "2026-03-28T20:14:14.302Z",
+    "precomputed_leader_stale": false,
+    "last_tick_at": "2026-03-28T20:14:17.594Z",
     "last_error": null,
-    "run_count": 5321
+    "run_count": 5333
   },
   "ralph_continue_steer": {
     "enabled": true,
     "cadence_ms": 60000,
     "message": "Ralph loop active continue",
     "active": true,
-    "last_state_check_at": "2026-03-28T20:14:14.322Z",
+    "last_state_check_at": "2026-03-28T20:14:17.617Z",
     "last_sent_at": "2026-03-28T18:37:38.023Z",
     "cooldown_anchor_at": "2026-03-28T18:37:38.023Z",
     "last_reason": "pane_missing",
@@ -52,7 +52,7 @@
   "fallback_auto_nudge": {
     "enabled": true,
     "stall_ms": 5000,
-    "last_tick_at": "2026-03-28T20:14:14.317Z",
+    "last_tick_at": "2026-03-28T20:14:17.611Z",
     "last_turn_at": "2026-03-28T20:06:04.769Z",
     "last_turn_count": 1,
     "last_message": "Done.\n\n- **Live app:** `http://127.0.0.1:8000`  \n  - Server is running in exec session **69718**.\n- ",
