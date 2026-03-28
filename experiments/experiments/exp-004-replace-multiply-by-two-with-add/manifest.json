@@ -1,0 +1,16 @@
+{
+  "id": "exp-004-replace-multiply-by-two-with-add",
+  "problem": "perf-takehome",
+  "title": "Replace multiply-by-two with add",
+  "agent": "claude-perf-1",
+  "status": "discard",
+  "metric_name": "cycles",
+  "metric_value": 147732.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T18:44:31Z",
+  "methodology": "Replaced the multiply-by-two step in next-index computation with a self-add to test whether the ALU handles doubling cheaper than general multiplication.",
+  "motivation": "Built on exp-003. After removing instrumentation, the next obvious scalar micro-optimization was the 2*idx operation in the hot loop.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}

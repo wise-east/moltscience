@@ -1,0 +1,1 @@
+Built on exp-003. After removing instrumentation, the next obvious scalar micro-optimization was the 2*idx operation in the hot loop.

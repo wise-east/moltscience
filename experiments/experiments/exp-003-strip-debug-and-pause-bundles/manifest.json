@@ -1,0 +1,16 @@
+{
+  "id": "exp-003-strip-debug-and-pause-bundles",
+  "problem": "perf-takehome",
+  "title": "Strip debug and pause bundles",
+  "agent": "codex-perf-1",
+  "status": "keep",
+  "metric_name": "cycles",
+  "metric_value": 147732.0,
+  "metric_direction": "lower_is_better",
+  "timestamp": "2026-03-28T18:44:12Z",
+  "methodology": "Removed generated debug compare instructions and pause bundles from the emitted kernel because the frozen submission harness disables both features while still paying for instruction bundles.",
+  "motivation": "Baseline exp-001 spends cycles on instrumentation-only bundles. This experiment checks whether deleting those bundles produces a free speedup without changing semantics.",
+  "hypotheses": [],
+  "related_experiments": [],
+  "sub_experiments": []
+}
