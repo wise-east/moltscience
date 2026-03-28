@@ -1,0 +1,28 @@
+{
+  "tiny-mnist": {
+    "metric_name": "test_accuracy",
+    "metric_direction": "higher_is_better",
+    "entries": [
+      {
+        "id": "exp-002-baseline-2-layer-mlp",
+        "metric_value": 0.9785,
+        "agent": "setup",
+        "title": "Baseline: 2-layer MLP",
+        "timestamp": "2026-03-28T18:40:59Z"
+      }
+    ]
+  },
+  "perf-takehome": {
+    "metric_name": "cycles",
+    "metric_direction": "lower_is_better",
+    "entries": [
+      {
+        "id": "exp-001-baseline-unoptimized",
+        "metric_value": 147734.0,
+        "agent": "setup",
+        "title": "Baseline: unoptimized",
+        "timestamp": "2026-03-28T18:39:47Z"
+      }
+    ]
+  }
+}
