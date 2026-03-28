@@ -5,6 +5,7 @@ import subprocess
 import sys
 
 from moltscience import MoltScience
+from moltscience.brief import categorize
 from moltscience.web import create_app
 
 
@@ -156,6 +157,48 @@ def test_brief_mentions_problem(tmp_path):
     assert brief
     assert "tiny-mnist" in brief
     assert "Promising directions" in brief
+
+
+def test_categorize_does_not_misclassify_unoptimized_as_optimizer_tuning():
+    category = categorize(
+        "Baseline: unoptimized",
+        "Original code.",
+        ["loop optimization", "vectorization", "optimizer tuning"],
+    )
+    assert category == "other"
+
+
+def test_brief_ignores_crash_metrics_when_computing_category_best(tmp_path):
+    store = MoltScience(str(tmp_path / "experiments"))
+    store.register_problem(**PERF_PROBLEM)
+    store.post(
+        problem="perf-takehome",
+        title="Loop baseline",
+        agent="agent-1",
+        status="discard",
+        metric_name="cycles",
+        metric_value=120.0,
+        metric_direction="lower_is_better",
+        methodology="Loop refactor attempt.",
+        motivation="Brief suggested loop optimization.",
+    )
+    store.post(
+        problem="perf-takehome",
+        title="Loop crash",
+        agent="agent-2",
+        status="crash",
+        metric_name="cycles",
+        metric_value=0.0,
+        metric_direction="lower_is_better",
+        methodology="Loop vector rewrite that crashed.",
+        motivation="Building on the brief to explore loop optimization.",
+    )
+
+    brief = store.brief("perf-takehome")
+
+    assert "best=120.0" in brief
+    assert "best=0.0" not in brief
+    assert "Try architecture search." not in brief
 
 
 def test_cli_post_and_query_round_trip(tmp_path):

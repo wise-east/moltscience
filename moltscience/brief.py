@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -18,9 +19,10 @@ CATEGORY_KEYWORDS = [
     (("algorithm", "rewrite"), "algorithmic improvement"),
     (("lr", "learning rate"), "learning rate tuning"),
     (("batch", "batch size"), "batch size tuning"),
-    (("arch", "layer", "hidden", "width", "depth"), "architecture search"),
-    (("optim", "adam", "sgd", "momentum"), "optimizer tuning"),
-    (("augment", "rotation", "dropout"), "regularization"),
+    (("architecture", "layer", "hidden", "width", "depth"), "architecture search"),
+    (("optimizer", "adam", "adamw", "sgd", "momentum"), "optimizer tuning"),
+    (("dropout", "weight decay", "regularization"), "regularization"),
+    (("augmentation", "augment", "rotation", "affine"), "data augmentation"),
 ]
 
 
@@ -34,14 +36,34 @@ def _load_problem(root: Path, problem: str) -> ProblemDefinition | None:
     return None
 
 
+def _keyword_matches(haystack: str, keyword: str) -> bool:
+    escaped = re.escape(keyword.lower())
+    if " " in keyword or "-" in keyword:
+        return re.search(rf"(?<!\w){escaped}(?!\w)", haystack) is not None
+    return re.search(rf"\b{escaped}\b", haystack) is not None
+
+
 def categorize(title: str, methodology: str, categories: list[str] | None = None) -> str:
     haystack = f"{title} {methodology}".lower()
+    allowed_categories = set(categories or [])
     for keywords, category in CATEGORY_KEYWORDS:
-        if any(keyword in haystack for keyword in keywords):
+        if allowed_categories and category not in allowed_categories:
+            continue
+        if any(_keyword_matches(haystack, keyword) for keyword in keywords):
             return category
-    if categories:
-        return categories[0]
     return "other"
+
+
+def _best_record(records: list[dict[str, Any]]) -> dict[str, Any]:
+    comparable_records = [
+        record for record in records if record["status"] != ExperimentStatus.CRASH.value
+    ] or records
+    direction = comparable_records[0]["metric_direction"]
+    return sorted(
+        comparable_records,
+        key=lambda record: record["metric_value"],
+        reverse=direction == MetricDirection.HIGHER_IS_BETTER.value,
+    )[0]
 
 
 def generate_brief(root: str | Path, problem: str) -> str:
@@ -102,12 +124,7 @@ def generate_brief(root: str | Path, problem: str) -> str:
         lines.extend(["", problem_definition.description, f"Rules: {problem_definition.rules}"])
     lines.extend(["", "### Approaches tried"])
     for category, records in sorted(categories.items()):
-        direction = records[0]["metric_direction"]
-        best_record = sorted(
-            records,
-            key=lambda record: record["metric_value"],
-            reverse=direction == MetricDirection.HIGHER_IS_BETTER.value,
-        )[0]
+        best_record = _best_record(records)
         lines.append(
             f"- {category}: {len(records)} experiments, best={best_record['metric_value']} ({best_record['id']})"
         )
@@ -118,13 +135,14 @@ def generate_brief(root: str | Path, problem: str) -> str:
 
     suggestions: list[str] = []
     catalog = set(problem_definition.categories if problem_definition is not None else [])
-    catalog.update(category for _, category in CATEGORY_KEYWORDS)
+    if not catalog:
+        catalog.update(category for _, category in CATEGORY_KEYWORDS)
     untried = sorted(category for category in catalog if category and category not in tried_categories)
     suggestions.extend(f"Try {category}." for category in untried[:4])
     suggestions.extend(
         f"Explore another variant of {category}."
         for category, records in sorted(categories.items())
-        if len(records) <= 1
+        if category != "other" and len(records) <= 1
     )
     if keep:
         suggestions.append("Combine successful elements from the current best experiments.")
