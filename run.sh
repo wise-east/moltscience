@@ -39,12 +39,13 @@ while true; do
 
     git add -A && git commit -m "checkpoint: pre-ralph-session-${crash_count} at ${elapsed}min" 2>/dev/null || true
 
-    timeout "${timeout_sec}" omx ralph --full-auto \
+    timeout "${timeout_sec}" omx ralph --dangerously-bypass-approvals-and-sandbox \
         "Execute the MoltScience PRD at .omx/plans/prd-moltscience.md. \
 Read AGENTS.md first, then follow the PRD phases. \
 Elapsed so far: ${elapsed} minutes. You have ${remaining} minutes remaining. \
 Check time gates in the PRD and commit checkpoints on schedule. \
 Use .venv/bin/python (not python) for all Python commands. \
+Flask is already installed. \
 If you hit a content filter error, skip the current step and move to the next phase." || true
 
     git add -A && git commit -m "checkpoint: post-ralph-session-${crash_count} at $(python3 -c "import time,os; print(int((time.time()-float(os.environ['MOLTSCIENCE_START']))/60))")min" 2>/dev/null || true

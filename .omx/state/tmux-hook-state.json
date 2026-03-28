@@ -1,7 +1,7 @@
 {
-  "total_injections": 5,
+  "total_injections": 7,
   "pane_counts": {
-    "%11": 5
+    "%11": 7
   },
   "session_counts": {},
   "recent_keys": {
@@ -9,11 +9,13 @@
     "18ab5630939e91cc24274bd47381584bd9a047af2cb1fcc4e8aa6c9352905d56": 1774722740428,
     "879de2e92e7e81a5c3dbea7df612b3cfa672555e8027aed83dbbf852be4ff3bf": 1774722762647,
     "7f2d9b16c80162df5fe3e303ce556adb692eda1317fa5c030441058af3ceafb9": 1774722814698,
-    "8c0303f4e9552364719e8b14541323b797e12c1e6274faf955d459b0c775c6ad": 1774722841098
+    "8c0303f4e9552364719e8b14541323b797e12c1e6274faf955d459b0c775c6ad": 1774722841098,
+    "da899f63441b8bc0fc42dad348e330b489ee4bfacb1c54b1f47053845286cdba": 1774723921724,
+    "107a94adebee243f59aba3ad34ea31eac67c124ad9968c00ffd35c5cd41a94c2": 1774723952086
   },
-  "last_injection_ts": 1774722841098,
+  "last_injection_ts": 1774723952086,
   "last_reason": "injection_sent",
-  "last_event_at": "2026-03-28T18:34:01.098Z",
+  "last_event_at": "2026-03-28T18:52:32.086Z",
   "last_target": "%11",
   "last_prompt_preview": "Continue from current mode state. [OMX_TMUX_INJECT]"
 }

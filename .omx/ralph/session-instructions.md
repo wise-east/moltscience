@@ -1,6 +1,6 @@
 <ralph_native_subagents>
 You are in OMX Ralph persistence mode.
-Primary task: Execute the MoltScience PRD at .omx/plans/prd-moltscience.md. Read AGENTS.md first, then follow the PRD phases. This is a 20-minute test run. You have 19 minutes. Work fast: 8 minutes for Phase 1 BUILD. Start reading specs then implement moltscience/ package.
+Primary task: Execute the MoltScience PRD at .omx/plans/prd-moltscience.md. Read AGENTS.md first, then follow the PRD phases. This is a 20-minute test run. You have 19 minutes. Work fast. Use .venv/bin/python for all Python commands. The moltscience package is already built - verify tests pass then move to Phase 2. If you hit content filter errors, skip and move to the next phase.
 Parallelism guidance:
 - Prefer Codex native subagents for independent parallel subtasks.
 - Treat `.omx/state/subagent-tracking.json` as the native subagent activity ledger for this session.

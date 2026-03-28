@@ -1,3 +1,19 @@
-# Ralph changed files for the mandatory final ai-slop-cleaner pass
-# Add one repo-relative path per line as Ralph edits files during the session.
-# Step 7.5 must keep ai-slop-cleaner strictly scoped to the paths listed here.
+moltscience/cli.py
+moltscience/web.py
+moltscience/templates/base.html
+moltscience/templates/index.html
+moltscience/templates/problem.html
+moltscience/templates/leaderboard.html
+moltscience/templates/brief.html
+moltscience/templates/experiment.html
+tests/test_moltscience.py
+problems/tiny-mnist/train.py
+demo/generate_timeline.py
+demo/leaderboard-perf.md
+demo/leaderboard-mnist.md
+demo/brief-perf.md
+demo/brief-mnist.md
+demo/timeline.md
+demo/cross-pollination.md
+demo/stats.md
+demo/progressive-disclosure.md
