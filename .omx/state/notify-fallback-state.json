@@ -1,7 +1,7 @@
 {
-  "pid": 1832106,
+  "pid": 1832285,
   "parent_pid": 1823835,
-  "started_at": "2026-03-28T19:23:53.730Z",
+  "started_at": "2026-03-28T19:23:57.736Z",
   "cwd": "/home/justin/ralphton",
   "notify_script": "/home/justin/ralphton/oh-my-codex/dist/scripts/notify-hook.js",
   "poll_ms": 75,
@@ -14,7 +14,7 @@
     "max_per_tick": 5,
     "run_count": 1,
     "leader_only": true,
-    "last_tick_at": "2026-03-28T19:23:53.733Z",
+    "last_tick_at": "2026-03-28T19:23:57.739Z",
     "last_result": {
       "processed": 0,
       "skipped": 0,
@@ -27,7 +27,7 @@
     "leader_only": true,
     "stale_threshold_ms": 180000,
     "precomputed_leader_stale": false,
-    "last_tick_at": "2026-03-28T19:23:53.734Z",
+    "last_tick_at": "2026-03-28T19:23:57.740Z",
     "last_error": null,
     "run_count": 1
   },
@@ -36,7 +36,7 @@
     "cadence_ms": 60000,
     "message": "Ralph loop active continue",
     "active": true,
-    "last_state_check_at": "2026-03-28T19:23:53.750Z",
+    "last_state_check_at": "2026-03-28T19:23:57.759Z",
     "last_sent_at": "2026-03-28T18:37:38.023Z",
     "cooldown_anchor_at": "2026-03-28T18:37:38.023Z",
     "last_reason": "send_failed",
@@ -52,7 +52,7 @@
   "fallback_auto_nudge": {
     "enabled": true,
     "stall_ms": 5000,
-    "last_tick_at": "2026-03-28T19:23:53.750Z",
+    "last_tick_at": "2026-03-28T19:23:57.758Z",
     "last_turn_at": "2026-03-28T18:57:19.364Z",
     "last_turn_count": 11,
     "last_message": "",
